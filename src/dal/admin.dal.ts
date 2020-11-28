@@ -1,5 +1,3 @@
-import { Admin } from '../interfaces/admin.interface';
+import { Admin } from "../interfaces";
 
-export class AdminDAL {
-  
-}
+export namespace AdminDAL {}

@@ -1,4 +1,4 @@
-import { Router } from 'express';
-import { TrainingController } from '../controllers/training.controller';
+import { Router } from "express";
+import { TrainingController } from "../controllers";
 
 export const trainingRouter = Router();
