@@ -5,7 +5,6 @@ import { trainingRouter } from './routes/training.route';
 import { muscleRouter } from './routes/muscle.route';
 import { tagRouter } from './routes/tag.route';
 
-
 export const appRouter = Router();
 
 appRouter.use('/api/admin', adminRouter);

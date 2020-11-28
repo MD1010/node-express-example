@@ -1,6 +1,5 @@
 import express from 'express';
 import * as bodyParser from 'body-parser';
-import { config } from './config';
 import { appRouter } from './router';
 
 export class Server {
@@ -20,7 +19,7 @@ export class Server {
     this.useMiddlewares();
     this.app.use(appRouter);
     this.app.listen(process.env.PORT, () =>
-      console.log(`Server listening on port ${config.server.port}`)
+      console.log(`Server listening on port ${process.env.PORT}`)
     );
   }
 
