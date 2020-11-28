@@ -1,6 +1,3 @@
-import { Request, Response } from 'express';
-import { MuscleDAL } from '../dal/muscle.dal';
+import { MuscleDAL } from "../dal";
 
-export class MuscleController {
-  
-}
+export namespace MuscleController {}

@@ -1,5 +1,3 @@
-import { Tag } from '../interfaces/tag.interface';
+import { Tag } from "../interfaces";
 
-export class TagDAL {
-  
-}
+export namespace TagDAL {}

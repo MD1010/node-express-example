@@ -1,6 +1,4 @@
-import { Request, Response } from 'express';
-import { AdminDAL } from '../dal/admin.dal';
+import { Request, Response } from "express";
+import { AdminDAL } from "../dal";
 
-export class AdminController {
-  
-}
+export namespace AdminController {}
