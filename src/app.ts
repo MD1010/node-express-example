@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+import { Server } from './server';
+import * as dotenv from "dotenv";
+
+dotenv.config({ path: __dirname+'/.env' });
+Server.startServer();
+=======
 import { Application } from "express";
 import express from "express";
 import * as bodyParser from "body-parser";
@@ -28,3 +35,4 @@ namespace Server {
 
 dotenv.config();
 Server.initApp();
+>>>>>>> master
