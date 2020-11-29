@@ -1,3 +1,1 @@
-export interface Muscle {
-   
-}
+export interface Muscle {}

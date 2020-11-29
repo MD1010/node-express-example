@@ -1,4 +1,4 @@
-import { Router } from 'express';
-import { ExerciseController } from '../controllers/exercise.controller';
+import { Router } from "express";
+import { ExerciseController } from "../controllers";
 
 export const exerciseRouter = Router();

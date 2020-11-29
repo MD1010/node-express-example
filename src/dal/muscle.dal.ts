@@ -1,5 +1,3 @@
-import { Muscle } from '../interfaces/muscle.interface';
+import { Muscle } from "../interfaces";
 
-export class MuscleDAL {
-  
-}
+export namespace MuscleDAL {}

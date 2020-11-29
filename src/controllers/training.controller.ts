@@ -1,6 +1,4 @@
-import { Request, Response } from 'express';
-import { TrainingDAL } from '../dal/training.dal';
+import { Request, Response } from "express";
+import { TrainingDAL } from "../dal";
 
-export class TrainingController {
-  
-}
+export namespace TrainingController {}

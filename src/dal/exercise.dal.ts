@@ -1,5 +1,3 @@
-import { Exercise } from '../interfaces/exercise.interface';
+import { Exercise } from "../interfaces";
 
-export class ExerciseDAL {
-  
-}
+export namespace ExerciseDAL {}

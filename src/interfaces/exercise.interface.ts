@@ -1,3 +1,1 @@
-export interface Exercise {
-   
-}
+export interface Exercise {}

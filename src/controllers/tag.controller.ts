@@ -1,6 +1,4 @@
-import { Request, Response } from 'express';
-import { TagDAL } from '../dal/tag.dal';
+import { Request, Response } from "express";
+import { TagDAL } from "../dal";
 
-export class TagController {
-  
-}
+export namespace TagController {}
