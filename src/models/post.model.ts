@@ -1,12 +1,5 @@
-import mongoose, { Schema, Document } from 'mongoose';
-
-export interface IPost extends Document {
-  publisher: string;
-  trainingID: Schema.Types.ObjectId;
-  content: string;
-  numOfLikes: number;
-  date: Schema.Types.Date;
-}
+import mongoose, { Schema } from 'mongoose';
+import {IPost} from "../interfaces"
 
 const PostSchema: Schema = new Schema({
   publisher: { type: String, required: true},
@@ -16,4 +9,5 @@ const PostSchema: Schema = new Schema({
   date: { type: Schema.Types.Date, required: true }
 });
 
-export default mongoose.model<IPost>('Post', PostSchema);
+const Posts = mongoose.model<IPost>('Posts', PostSchema);
+export default Posts
