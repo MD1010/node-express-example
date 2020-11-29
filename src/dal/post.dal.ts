@@ -1,3 +1,3 @@
-import { Muscle } from "../interfaces/muscle.interface";
+import { Post } from "../interfaces";
 
 export namespace PostDAL {}
