@@ -21,14 +21,20 @@
   "dependencies": {
     "@types/cors": "^2.8.7",
     "axios": "^0.20.0",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.2",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.18"
   },
   "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.9",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/mongoose": "^5.10.1",
     "@types/node": "^14.14.10",
     "cookie-parser": "^1.4.5",
     "nodemon": "^2.0.4",

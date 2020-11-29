@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-import { Router } from 'express';
-import { exerciseRouter } from './routes/exercise.route';
-import { adminRouter } from './routes/admin.route';
-import { trainingRouter } from './routes/training.route';
-import { muscleRouter } from './routes/muscle.route';
-import { tagRouter } from './routes/tag.route';
-=======
 import { Router } from "express";
 import {
   adminRouter,
@@ -14,7 +6,6 @@ import {
   tagRouter,
   muscleRouter,
 } from "./routes";
->>>>>>> master
 
 export const appRouter = Router();
 
