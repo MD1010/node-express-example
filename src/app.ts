@@ -1,15 +1,9 @@
-<<<<<<< HEAD
-import { Server } from './server';
-import * as dotenv from "dotenv";
-
-dotenv.config({ path: __dirname+'/.env' });
-Server.startServer();
-=======
 import { Application } from "express";
 import express from "express";
 import * as bodyParser from "body-parser";
 import * as dotenv from "dotenv";
 import { appRouter } from "./router";
+import connect from './db.connect';
 
 namespace Server {
   let app: Application;
@@ -19,7 +13,7 @@ namespace Server {
 
     app = express();
     useMiddlewares(app);
-
+    connect(process.env.DB_HOST);
     app.listen(process.env.PORT, () =>
       console.log(`Server listening on port ${process.env.PORT}`)
     );
@@ -35,4 +29,3 @@ namespace Server {
 
 dotenv.config();
 Server.initApp();
->>>>>>> master
