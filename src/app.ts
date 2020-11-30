@@ -12,7 +12,7 @@ namespace Server {
 
     app = express();
     useMiddlewares(app);
-    connect(process.env.DB_HOST);
+    connect(process.env.DB_CONNECTION_STRING);
     app.listen(process.env.PORT, () =>
       console.log(`Server listening on port ${process.env.PORT}`)
     );
