@@ -44,7 +44,7 @@ export namespace PostDAL {
           });
     }
 
-    export const getAllPosts = async () => {
+    export const getAllPosts = () => {
         return Posts.find()
           .then((result: IPost[]) => {
             return result;
