@@ -1,6 +1,5 @@
 import {PostDAL} from "../dal"
 import { Request, Response } from 'express';
-import Posts from "../models/post.model";
 import {runAsyncWrapper} from "../helpers/errorHandler"
 
 export namespace PostController {
