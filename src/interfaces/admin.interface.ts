@@ -1,1 +1,4 @@
-export interface Admin {}
+export interface IAdmin {
+  username: string;
+  password: string;
+}
