@@ -1,26 +1,28 @@
 import {PostDAL} from "../dal"
 import { Request, Response } from 'express';
+import Posts from "../models/post.model";
+import {runAsyncWrapper} from "../helpers/errorHandler"
 
 export namespace PostController {
 
-    export const createPost = async (req: Request, res: Response) => {
+    export const createPost = runAsyncWrapper(async (req: Request, res: Response) => {
         return res.json(await PostDAL.createPost(req.body));
-    }
+    })
 
-    export const getPost = async (req: Request, res: Response) => {
+    export const getPost = runAsyncWrapper(async (req: Request, res: Response) => {
         return res.json(await PostDAL.getPost(req.params.id));
-    }
+    })
 
-    export const updatePost = async (req: Request, res: Response) => {
+    export const updatePost = runAsyncWrapper(async (req: Request, res: Response) => {
         return res.json(await PostDAL.updatePost(req.params.id, req.body));
-    }
+    })
 
-    export const deletePost = async (req: Request, res: Response) => {
+    export const deletePost = runAsyncWrapper(async (req: Request, res: Response) => {
         return res.json(await PostDAL.deletePost(req.params.id));
-    }
+    })
 
-    export const getAllPosts = async (res: Response) => {
+    export const getAllPosts = runAsyncWrapper(async (req: Request, res: Response, next: any) => {
         return res.json(await PostDAL.getAllPosts());
-    }
+    })
 
 }
