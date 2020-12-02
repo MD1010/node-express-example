@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Document } from "mongoose";
-import { CrudEntityController } from "../controllers/entity-crud.controller";
+import { CrudEntityController } from "../controllers/crud-entity.controller";
 
 export class CrudRouter<T extends Document> {
   private _crudRouter = Router();

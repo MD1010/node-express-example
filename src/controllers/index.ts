@@ -4,7 +4,7 @@ import { Exercise, Muscle, Post, Tag } from "../models";
 import { PostEntity } from "./../entities/post.entity";
 import { TagEntity } from "./../entities/tag.entity";
 import { Training } from "./../models/training.model";
-import { CrudEntityController } from "./entity-crud.controller";
+import { CrudEntityController } from "./crud-entity.controller";
 
 export { AdminController } from "./admin.controller";
 export const ExerciseController = new CrudEntityController<Exercise>(
