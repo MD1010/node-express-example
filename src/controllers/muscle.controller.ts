@@ -1,1 +1,9 @@
-export class MuscleController {}
+import { IMuscle } from "../models";
+import { MuscleEntity } from "./../entities/muscle.entity";
+import { GenericCrudController } from "./generic-crud.controller";
+
+export class MuscleController extends GenericCrudController<IMuscle> {
+  constructor() {
+    super(MuscleEntity);
+  }
+}

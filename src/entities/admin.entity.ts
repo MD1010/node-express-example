@@ -1,6 +1,6 @@
 import { model, Model, Schema } from "mongoose";
 import { IAdmin } from "../models/admin.model";
-import { DbEnity } from "./genric-entity.dal";
+import { DbEnity } from "../dal/genric-entity.dal";
 
 const AdminSchema: Schema = new Schema({
   username: { type: String, required: true },

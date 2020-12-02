@@ -1,7 +1,7 @@
 import mongoose, { Model, Schema } from "mongoose";
 import { IPost } from "../models";
 import { Document } from "mongoose";
-import { DbEnity } from "./genric-entity.dal";
+import { DbEnity } from "../dal/genric-entity.dal";
 
 const PostSchema: Schema = new Schema({
   publisher: { type: String, required: true },
