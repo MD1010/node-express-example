@@ -1,10 +1,10 @@
-import { Document } from "mongoose";
 import { Router } from "express";
-import { GenericCrudController } from "../controllers/generic-crud.controller";
+import { Document } from "mongoose";
+import { CrudEntityController } from "../controllers/entity-crud.controller";
 
 export class CrudRouter<T extends Document> {
   private _crudRouter = Router();
-  constructor(private controller: GenericCrudController<T>) {
+  constructor(private controller: CrudEntityController<T>) {
     this._crudRouter.get("/", controller.getAllEntities);
     this._crudRouter.post("/", controller.createEntity);
     this._crudRouter.put("/:id", controller.updateEntity);
