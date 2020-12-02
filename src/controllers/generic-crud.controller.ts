@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { Document } from "mongoose";
+import { DbEnity } from "../entities/genric-entity.dal";
 import { errorHandler } from "../helpers/errorHandler";
-import { DbEnity } from "../models/genric-entity.dal";
-import { PostEntity } from "../models/post.model";
 
 export abstract class GenericCrudController<T extends Document> {
   constructor(private dbEntity: DbEnity<T>) {}

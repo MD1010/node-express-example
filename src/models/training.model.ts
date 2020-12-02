@@ -1,3 +1,1 @@
-export const TrainingModel = {
-  
-};
+export interface ITraining extends Document {}

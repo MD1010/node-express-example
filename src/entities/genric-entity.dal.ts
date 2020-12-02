@@ -1,6 +1,5 @@
-import { toObjectId } from "../helpers/base-id";
-import { IPost } from "../interfaces/post.interface";
 import mongoose, { Document, Model, Schema } from "mongoose";
+import { toObjectId } from "../helpers/base-id";
 import {
   IReadEntity,
   IWriteEntity,

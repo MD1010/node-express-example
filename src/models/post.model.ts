@@ -1,14 +1,10 @@
-import mongoose, { Model, Schema } from "mongoose";
-import { IPost } from "../interfaces";
-import { Document } from "mongoose";
-import { DbEnity } from "./genric-entity.dal";
+import mongoose, { Schema, Document } from "mongoose";
 
-const PostSchema: Schema = new Schema({
-  publisher: { type: String, required: true },
-  trainingID: { type: Schema.Types.ObjectId, required: true },
-  content: { type: String, required: true },
-  numOfLikes: { type: Number, required: true },
-  date: { type: Schema.Types.Date, required: true },
-});
-
-export const PostEntity = new DbEnity<IPost>("Post", PostSchema);
+export interface IPost extends Document {
+  _id: mongoose.Types.ObjectId;
+  publisher: string;
+  trainingID: Schema.Types.ObjectId;
+  content: string;
+  numOfLikes: number;
+  date: Schema.Types.Date;
+}
