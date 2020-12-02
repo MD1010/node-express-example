@@ -1,6 +1,7 @@
-export const runAsyncWrapper = (callback: any) => {
-    return (req: any, res: any, next: any) => {
-      callback(req, res, next)
-        .catch(next)
-    }
-  }
+import { NextFunction, Request, Response } from "express";
+
+export const errorHandler = (callback: any) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    callback(req, res, next).catch(next);
+  };
+};

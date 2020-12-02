@@ -1,3 +1,1 @@
-import { MuscleDAL } from "../dal";
-
-export namespace MuscleController {}
+export class MuscleController {}

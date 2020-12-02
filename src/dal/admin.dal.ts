@@ -1,9 +1,9 @@
-import { Admin } from "../models/admin.model";
+import { AdminEntity } from "../models/admin.model";
 
 export namespace AdminDAL {
-  export const dbLogin = async (userName: string, password: String) => {
-    let admin = await Admin.findOne({
-      username: userName,
+  export const dbLogin = async (username: string, password: string) => {
+    let admin = await AdminEntity.findOne({
+      username,
     });
     return admin;
   };

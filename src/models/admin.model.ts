@@ -1,12 +1,11 @@
-import { Document, model, Model, Schema } from "mongoose";
-import { BaseDocumentId } from "../dal/base-id";
+import { model, Model, Schema } from "mongoose";
 import { IAdmin } from "../interfaces/admin.interface";
-
-type AdminDocument = IAdmin & Document & BaseDocumentId;
+import { DbEnity } from "./genric-entity.dal";
 
 const AdminSchema: Schema = new Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
 });
 
-export const Admin: Model<AdminDocument> = model("Admin", AdminSchema);
+export const AdminEntity = new DbEnity<IAdmin>("Admin", AdminSchema);
+// export const Admin: Model<IAdmin> = model("Admin", AdminSchema);

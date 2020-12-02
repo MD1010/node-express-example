@@ -1,7 +1,7 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
 export interface IPost extends Document {
-  _id: mongoose.Types.ObjectId,
+  _id: mongoose.Types.ObjectId;
   publisher: string;
   trainingID: Schema.Types.ObjectId;
   content: string;

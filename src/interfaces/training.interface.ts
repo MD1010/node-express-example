@@ -1,1 +1,1 @@
-export interface Training {}
+export interface ITraining extends Document {}

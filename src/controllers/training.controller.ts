@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
-import { TrainingDAL } from "../dal";
+import { ITraining } from "../interfaces";
+import { GenericCrudController } from "./generic-crud.controller";
 
-export namespace TrainingController {}
+export class TrainingController {}

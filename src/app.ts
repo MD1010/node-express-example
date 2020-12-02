@@ -9,7 +9,7 @@ namespace Server {
 
   export function initApp(): Application {
     if (app) return app;
-    
+
     app = express();
     useMiddlewares(app);
     connect(process.env.DB_CONNECTION_STRING);
@@ -24,7 +24,7 @@ namespace Server {
     app.use(appRouter);
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use((error: any, req: any, res: any, next: any) => {
-      return res.status(500).json({ error: error.toString() });
+      return res.status(error.code).json({ error: error.message });
     });
   }
 }

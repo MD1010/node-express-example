@@ -1,4 +1,3 @@
-
 import { Router } from "express";
 import {
   adminRouter,
@@ -6,7 +5,7 @@ import {
   trainingRouter,
   tagRouter,
   muscleRouter,
-  postRouter
+  postRouter,
 } from "./routes";
 
 export const appRouter = Router();
@@ -16,8 +15,11 @@ appRouter.use("/api/exercise", exerciseRouter);
 appRouter.use("/api/training", trainingRouter);
 appRouter.use("/api/tag", tagRouter);
 appRouter.use("/api/muscle", muscleRouter);
-appRouter.use("/api/post", postRouter)
+appRouter.use("/api/post", postRouter);
 
+appRouter.get("/", (req, res) => {
+  res.send("ok");
+});
 appRouter.use("*", (req, res) => {
   res.status(404).send("Invalid Route");
 });
