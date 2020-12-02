@@ -1,10 +1,5 @@
-import mongoose, { Schema, Document } from "mongoose";
-import { IExercise } from "./exercise.model";
-import { ITag } from "./tag.model";
+import { ITraining } from "gymstagram-common";
+import { Document } from "mongoose";
 
-export interface ITraining extends Document {
-  _id: mongoose.Types.ObjectId;
-  name: string;
-  tags: ITag[];
-  exercises: IExercise[];
-}
+type Model = Document & ITraining;
+export interface Training extends Model {}

@@ -1,7 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { IAdmin } from "gymstagram-common";
 
-export interface IAdmin extends Document {
-  _id: mongoose.Types.ObjectId;
-  username: string;
-  password: string;
-}
+type Model = Document & IAdmin;
+export interface Admin extends Model {}

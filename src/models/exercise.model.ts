@@ -1,15 +1,5 @@
-import mongoose, { Schema, Document } from "mongoose";
-import { ExerciseDifficulty } from "../enums/exercise-difficulty.enum";
+import { IExercise } from "gymstagram-common";
+import { Document } from "mongoose";
 
-export interface IExercise extends Document {
-  _id: mongoose.Types.ObjectId;
-  name: string;
-  description: string;
-  url: string;
-  muscles: mongoose.Types.ObjectId[];
-  difficulty: ExerciseDifficulty;
-  notes: string;
-  sets: number;
-  reps: number;
-  restTime: number;
-}
+type Model = Document & IExercise;
+export interface Exercise extends Model {}

@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { IExercise } from "../models";
+import { Exercise } from "../models";
 import { DbEnity } from "../dal/genric-entity.dal";
 
 const ExerciseSchema: Schema = new Schema({
@@ -14,7 +14,4 @@ const ExerciseSchema: Schema = new Schema({
   restTime: { type: Schema.Types.Number, required: true },
 });
 
-export const ExerciseEntity = new DbEnity<IExercise>(
-  "Exercise",
-  ExerciseSchema
-);
+export const ExerciseEntity = new DbEnity<Exercise>("Exercise", ExerciseSchema);

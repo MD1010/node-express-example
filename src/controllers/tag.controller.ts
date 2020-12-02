@@ -1,8 +1,8 @@
-import { ITag } from "../models";
+import { Tag } from "../models";
 import { TagEntity } from "./../entities";
 import { GenericCrudController } from "./generic-crud.controller";
 
-export class TagController extends GenericCrudController<ITag> {
+export class TagController extends GenericCrudController<Tag> {
   constructor() {
     super(TagEntity);
   }

@@ -1,5 +1,5 @@
 import mongoose, { Model, Schema } from "mongoose";
-import { IPost } from "../models";
+import { Post } from "../models";
 import { Document } from "mongoose";
 import { DbEnity } from "../dal/genric-entity.dal";
 
@@ -11,4 +11,4 @@ const PostSchema: Schema = new Schema({
   date: { type: Schema.Types.Date, required: true },
 });
 
-export const PostEntity = new DbEnity<IPost>("Post", PostSchema);
+export const PostEntity = new DbEnity<Post>("Post", PostSchema);

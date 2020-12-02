@@ -1,6 +1,5 @@
-import mongoose, { Schema, Document } from "mongoose";
+import { ITag } from "gymstagram-common";
+import { Document } from "mongoose";
 
-export interface ITag extends Document {
-  _id: mongoose.Types.ObjectId;
-  name: string;
-}
+type Model = Document & ITag;
+export interface Tag extends Model {}

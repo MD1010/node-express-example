@@ -1,6 +1,5 @@
-import mongoose, { Schema, Document } from "mongoose";
+import { IMuscle } from "gymstagram-common";
+import { Document } from "mongoose";
 
-export interface IMuscle extends Document {
-  _id: mongoose.Types.ObjectId;
-  name: string;
-}
+type Model = Document & IMuscle;
+export interface Muscle extends Model {}

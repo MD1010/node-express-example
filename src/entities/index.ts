@@ -1,3 +1,4 @@
+import { Admin } from "../models/admin.model";
 import { TagEntity } from "./tag.entity";
 export { PostEntity } from "./post.entity";
 export { AdminEntity } from "./admin.entity";
