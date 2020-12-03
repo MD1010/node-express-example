@@ -1,14 +1,16 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { AdminDAL } from "../dal";
+import { AdminEntity } from "../entities";
 import { errorHandler } from "../helpers/errorHandler";
 import { Exceptions } from "../helpers/exceptions";
 
 export namespace AdminController {
   export const login = errorHandler(async (req: Request, res: Response) => {
     const { username, password } = req.body;
-    const admin = await AdminDAL.dbLogin(username, password);
+    const admin = await AdminEntity.findOne({
+      username,
+    });
 
     if (!admin) throw Exceptions.WRONG_CREDENTIALS;
     //hash passwords and save to db in with 8 rounds -> bcrypt.hashSync("123456", 8)
