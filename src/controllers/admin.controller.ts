@@ -12,14 +12,9 @@ export namespace AdminController {
       username,
     });
 
-    if (!admin) throw Exceptions.WRONG_CREDENTIALS;
-    //hash passwords and save to db in with 8 rounds -> bcrypt.hashSync("123456", 8)
-
-    const passwordIsValid = bcrypt.compareSync(password, admin.password);
-
-    if (!passwordIsValid) {
+    if (!admin || !bcrypt.compareSync(password, admin.password))
       throw Exceptions.WRONG_CREDENTIALS;
-    }
+    //hash passwords and save to db in with 8 rounds -> bcrypt.hashSync("123456", 8)
 
     var token = jwt.sign({ id: admin._id }, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: 86400, // 24 hours
