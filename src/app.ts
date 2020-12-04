@@ -26,7 +26,7 @@ namespace Server {
     app.use(appRouter);
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use((error: any, req: any, res: any, next: any) => {
-      return res.status(error.code).json({ error: error.message });
+      return res.status(error.code || 500).json({ error: error.message });
     });
   }
 }
