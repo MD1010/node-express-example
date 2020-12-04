@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 import express, { Application } from "express";
 import { appRouter } from "./router";
 import connect from "./db.connect";
+import cors from "cors";
 
 namespace Server {
   let app: Application;
@@ -21,6 +22,7 @@ namespace Server {
 
   function useMiddlewares(app: Application) {
     app.use(bodyParser.json());
+    app.use(cors());
     app.use(appRouter);
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use((error: any, req: any, res: any, next: any) => {
