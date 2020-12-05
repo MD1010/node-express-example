@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { errorHandler } from "../utils/errorHandler";
 import { Muscle } from "../models";
-import { ControllerFactory } from "./utils/controller-factory";
+import { CrudActionsFactory } from "./utils/controller-factory";
 
-export class MuscleController extends ControllerFactory<Muscle> {
+export class MuscleController extends CrudActionsFactory<Muscle> {
   getAllMuscles = errorHandler(async (req: Request, res: Response) => {
     return res.json(await this.crudActions.getAllEntities());
   });

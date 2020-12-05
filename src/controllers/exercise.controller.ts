@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { errorHandler } from "../utils/errorHandler";
 import { Exercise } from "../models";
-import { ControllerFactory } from "./utils/controller-factory";
+import { CrudActionsFactory } from "./utils/controller-factory";
 
-export class ExerciseController extends ControllerFactory<Exercise> {
+export class ExerciseController extends CrudActionsFactory<Exercise> {
   getAllExercises = errorHandler(async (req: Request, res: Response) => {
     return res.json(await this.crudActions.getAllEntities());
   });

@@ -1,4 +1,4 @@
-import { ControllerFactory } from "./utils/controller-factory";
+import { CrudActionsFactory } from "./utils/controller-factory";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
@@ -8,7 +8,7 @@ import { Exceptions } from "../utils/exceptions";
 import { Admin } from "../models";
 import { GenericCrudActions } from "./utils/generic-crud-actions";
 
-export class AdminController extends ControllerFactory<Admin> {
+export class AdminController extends CrudActionsFactory<Admin> {
   login = errorHandler(async (req: Request, res: Response) => {
     const { username, password } = req.body;
     const admin = await this.crudActions.getEntity({ username });

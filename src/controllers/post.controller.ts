@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { errorHandler } from "../utils/errorHandler";
 import { Post } from "../models";
-import { ControllerFactory } from "./utils/controller-factory";
+import { CrudActionsFactory } from "./utils/controller-factory";
 
-export class PostController extends ControllerFactory<Post> {
+export class PostController extends CrudActionsFactory<Post> {
   getAllPosts = errorHandler(async (req: Request, res: Response) => {
     return res.json(await this.crudActions.getAllEntities());
   });

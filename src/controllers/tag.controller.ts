@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { errorHandler } from "../utils/errorHandler";
 import { Tag } from "../models";
-import { ControllerFactory } from "./utils/controller-factory";
+import { CrudActionsFactory } from "./utils/controller-factory";
 
-export class TagController extends ControllerFactory<Tag> {
+export class TagController extends CrudActionsFactory<Tag> {
   getAllTags = errorHandler(async (req: Request, res: Response) => {
     return res.json(await this.crudActions.getAllEntities());
   });
