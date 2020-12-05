@@ -1,16 +1,17 @@
+import { ControllerFactory } from "./utils/controller-factory";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { AdminEntity } from "../entities";
-import { errorHandler } from "../helpers/errorHandler";
-import { Exceptions } from "../helpers/exceptions";
+import { errorHandler } from "../utils/errorHandler";
+import { Exceptions } from "../utils/exceptions";
+import { Admin } from "../models";
+import { GenericCrudController } from "./utils/generic-crud.controller";
 
-export namespace AdminController {
-  export const login = errorHandler(async (req: Request, res: Response) => {
+export class AdminController extends ControllerFactory<Admin> {
+  login = errorHandler(async (req: Request, res: Response) => {
     const { username, password } = req.body;
-    const admin = await AdminEntity.findOne({
-      username,
-    });
+    const admin = await this.crudController.getEntity({ username });
 
     if (!admin || !bcrypt.compareSync(password, admin.password))
       throw Exceptions.WRONG_CREDENTIALS;
