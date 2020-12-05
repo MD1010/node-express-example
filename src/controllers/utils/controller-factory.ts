@@ -3,8 +3,8 @@ import { GenericCrudActions } from "./generic-crud-actions";
 import { Document } from "mongoose";
 
 export class ControllerFactory<T extends Document> {
-  protected crudController: GenericCrudActions<T>;
+  protected crudActions: GenericCrudActions<T>;
   constructor(dbEnity: DbEnity<T>) {
-    this.crudController = new GenericCrudActions<T>(dbEnity);
+    this.crudActions = new GenericCrudActions<T>(dbEnity);
   }
 }

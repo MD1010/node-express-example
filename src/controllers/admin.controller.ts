@@ -11,7 +11,7 @@ import { GenericCrudActions } from "./utils/generic-crud-actions";
 export class AdminController extends ControllerFactory<Admin> {
   login = errorHandler(async (req: Request, res: Response) => {
     const { username, password } = req.body;
-    const admin = await this.crudController.getEntity({ username });
+    const admin = await this.crudActions.getEntity({ username });
 
     if (!admin || !bcrypt.compareSync(password, admin.password))
       throw Exceptions.WRONG_CREDENTIALS;
