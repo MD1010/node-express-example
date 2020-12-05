@@ -1,5 +1,5 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import { toObjectId } from "../helpers/base-id";
+import { toObjectId } from "../utils/base-id";
 import {
   IReadEntity,
   IWriteEntity,
@@ -36,17 +36,6 @@ export class DbEnity<T extends Document>
       .deleteOne({ _id: toObjectId(id) })
       .then((data) => {
         return data;
-      })
-      .catch((error: Error) => {
-        throw error;
-      });
-  }
-
-  findById(id: string) {
-    return this._model
-      .findById({ _id: toObjectId(id) })
-      .then((result) => {
-        return result as T;
       })
       .catch((error: Error) => {
         throw error;

@@ -17,7 +17,7 @@ appRouter.use("/api/tag", tagRouter);
 appRouter.use("/api/muscle", muscleRouter);
 appRouter.use("/api/post", postRouter);
 
-appRouter.get("/", (req, res) => {
+appRouter.get("/check", (req, res) => {
   res.send("ok");
 });
 appRouter.use("*", (req, res) => {

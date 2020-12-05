@@ -1,5 +1,4 @@
 export interface IReadEntity<T> {
-  findById: (id: string) => Promise<T | null>;
   findOne: (prop: any) => Promise<T | null>;
   findAll: () => Promise<T[]>;
 }

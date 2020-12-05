@@ -1,6 +1,9 @@
 import { Request, Response, Router } from "express";
 import { AdminController } from "../controllers";
-import { errorHandler } from "../helpers/errorHandler";
+import { AdminEntity } from "../entities";
+import { errorHandler } from "../utils/errorHandler";
 
 export const adminRouter = Router();
-adminRouter.post("/login", AdminController.login);
+const adminController = new AdminController(AdminEntity);
+
+adminRouter.post("/login", adminController.login);
