@@ -20,7 +20,7 @@ dotenv.config();
 const app = express();
 export const http = createServer(app);
 useMiddlewares(app);
+SocketManager.initSocketManager();
 http.listen(process.env.PORT, () =>
   console.log(`Server listening on port ${process.env.PORT}`)
 );
-SocketManager.initSocketManager();

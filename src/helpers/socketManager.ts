@@ -1,9 +1,10 @@
 // import { log } from "console";
 import { Socket } from "socket.io";
 import { http } from "../app";
+import { Server } from "socket.io";
 
 export namespace SocketManager {
-  let socket: Socket;
+  let socket: Server;
 
   function listenToEvents() {
     socket.on("connection", (socket: Socket) => {
@@ -11,7 +12,7 @@ export namespace SocketManager {
     });
   }
   export function initSocketManager() {
-    socket = require("socket.io")(http, {
+    socket = new Server(http, {
       cors: {
         origin: "http://localhost:3000",
       },
