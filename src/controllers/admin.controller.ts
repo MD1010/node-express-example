@@ -6,7 +6,7 @@ import { AdminEntity } from "../entities";
 import { errorHandler } from "../utils/errorHandler";
 import { Exceptions } from "../utils/exceptions";
 import { Admin } from "../models";
-import { GenericCrudController } from "./utils/generic-crud.controller";
+import { GenericCrudActions } from "./utils/generic-crud-actions";
 
 export class AdminController extends ControllerFactory<Admin> {
   login = errorHandler(async (req: Request, res: Response) => {

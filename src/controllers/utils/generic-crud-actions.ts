@@ -3,7 +3,7 @@ import { Document } from "mongoose";
 import { DbEnity } from "../../dal/genric-entity.dal";
 import { errorHandler } from "../../utils/errorHandler";
 
-export class GenericCrudController<T extends Document> {
+export class GenericCrudActions<T extends Document> {
   constructor(private dbEntity: DbEnity<T>) {}
   createEntity = async (entity: T) => {
     return await this.dbEntity.create(entity);

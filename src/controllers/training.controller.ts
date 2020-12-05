@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { errorHandler } from "../utils/errorHandler";
 import { Exceptions } from "../utils/exceptions";
 import { Training } from "../models";
-import { GenericCrudController } from "./utils/generic-crud.controller";
+import { GenericCrudActions } from "./utils/generic-crud-actions";
 
 export class TrainingController extends ControllerFactory<Training> {
   getAllTrainings = errorHandler(async (req: Request, res: Response) => {

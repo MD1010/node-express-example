@@ -1,10 +1,10 @@
 import { DbEnity } from "../../dal/genric-entity.dal";
-import { GenericCrudController } from "./generic-crud.controller";
+import { GenericCrudActions } from "./generic-crud-actions";
 import { Document } from "mongoose";
 
 export class ControllerFactory<T extends Document> {
-  protected crudController: GenericCrudController<T>;
+  protected crudController: GenericCrudActions<T>;
   constructor(dbEnity: DbEnity<T>) {
-    this.crudController = new GenericCrudController<T>(dbEnity);
+    this.crudController = new GenericCrudActions<T>(dbEnity);
   }
 }
