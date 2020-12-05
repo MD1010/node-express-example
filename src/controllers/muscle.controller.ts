@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { errorHandler } from "../utils/errorHandler";
 import { Muscle } from "../models";
-import { GenericCrudController } from "./utils/controller-factory";
+import { GenericCrudController } from "./utils/generic-crud.controller";
 
 export class MuscleController extends GenericCrudController<Muscle> {
   getAllMuscles = this.getAllEntites;

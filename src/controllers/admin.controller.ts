@@ -8,13 +8,10 @@ import { Exceptions } from "../utils/exceptions";
 import { GenericDalActions } from "../dal/crud-actions.dal";
 
 export class AdminController {
-  private _dalActions: GenericDalActions<Admin>;
-  constructor(private dbEntity: DbEnity<Admin>) {
-    this._dalActions = new GenericDalActions(dbEntity);
-  }
+  constructor(private dbEntity: DbEnity<Admin>) {}
   login = errorHandler(async (req: Request, res: Response) => {
     const { username, password } = req.body;
-    const admin = await this._dalActions.getDalEntity({ username });
+    const admin = await this.dbEntity.findOne({ username });
 
     if (!admin || !bcrypt.compareSync(password, admin.password))
       throw Exceptions.WRONG_CREDENTIALS;
