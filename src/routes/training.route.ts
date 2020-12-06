@@ -6,6 +6,7 @@ export const trainingRouter = Router();
 const trainingController = new TrainingController(TrainingEntity);
 
 trainingRouter.get("/", trainingController.getAllTrainings);
+trainingRouter.get("/groupByTags", trainingController.groupByTags);
 trainingRouter.post("/", trainingController.createTraining);
 trainingRouter.put("/:id", trainingController.updateTraining);
 trainingRouter.get("/:id", trainingController.getTraining);

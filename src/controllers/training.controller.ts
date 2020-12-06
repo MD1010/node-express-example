@@ -9,4 +9,8 @@ export class TrainingController extends GenericCrudController<Training> {
   getTraining = this.getEntityById;
   updateTraining = this.updateEntity;
   deleteTraining = this.deleteEntity;
+
+  groupByTags =  errorHandler(async (req: Request, res: Response) => {
+    return res.json(await this.dbEntity.groupByTags());
+  });
 }

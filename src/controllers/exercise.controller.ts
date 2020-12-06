@@ -3,6 +3,7 @@ import { errorHandler } from "../utils/errorHandler";
 import { Exercise } from "../models";
 import { GenericCrudController } from "./utils/generic-crud.controller";
 import { throws } from "assert";
+import { DbEnity } from "../dal/genric-entity.dal";
 
 export class ExerciseController extends GenericCrudController<Exercise> {
   getAllExercises = this.getAllEntites;
