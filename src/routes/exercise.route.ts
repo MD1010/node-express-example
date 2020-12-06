@@ -1,9 +1,6 @@
-import { ExerciseController } from "./../controllers";
-import { Request, Response, Router } from "express";
-import { AdminController } from "../controllers";
-import { errorHandler } from "../utils/errorHandler";
-import { Exercise } from "../models";
+import { Router } from "express";
 import { ExerciseEntity } from "../entities";
+import { ExerciseController } from "./../controllers";
 
 export const exerciseRouter = Router();
 const exerciseController = new ExerciseController(ExerciseEntity);

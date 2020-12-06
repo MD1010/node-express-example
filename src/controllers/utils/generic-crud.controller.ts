@@ -5,7 +5,7 @@ import { errorHandler } from "../../utils/errorHandler";
 import { GenericDalActions } from "../../dal/crud-actions.dal";
 
 export abstract class GenericCrudController<T extends Document> {
-  constructor(private dbEntity: DbEnity<T>) {}
+  constructor(protected dbEntity: DbEnity<T>) {}
   protected getAllEntites = errorHandler(
     async (req: Request, res: Response) => {
       return res.json(await this.dbEntity.findAll());

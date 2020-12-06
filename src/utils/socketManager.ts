@@ -4,7 +4,7 @@ import { http } from "../app";
 import { Server } from "socket.io";
 
 export namespace SocketManager {
-  let socket: Server;
+  export let socket: Server;
 
   function listenToEvents() {
     socket.on("connection", (socket: Socket) => {

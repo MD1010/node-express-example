@@ -1,7 +1,6 @@
-import mongoose, { Model, Schema } from "mongoose";
-import { Training } from "../models";
-import { Document } from "mongoose";
+import { Schema } from "mongoose";
 import { DbEnity } from "../dal/genric-entity.dal";
+import { Training } from "../models";
 
 const TrainingSchema: Schema = new Schema({
   name: { type: String, required: true },
