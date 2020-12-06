@@ -1,28 +1,12 @@
 import { Request, Response } from "express";
 import { errorHandler } from "../utils/errorHandler";
 import { Muscle } from "../models";
-import { CrudActionsFactory } from "./utils/controller-factory";
+import { GenericCrudController } from "./utils/generic-crud.controller";
 
-export class MuscleController extends CrudActionsFactory<Muscle> {
-  getAllMuscles = errorHandler(async (req: Request, res: Response) => {
-    return res.json(await this.crudActions.getAllEntities());
-  });
-
-  createMuscle = errorHandler(async (req: Request, res: Response) => {
-    return res.json(await this.crudActions.createEntity(req.body));
-  });
-
-  getMuscle = errorHandler(async (req: Request, res: Response) => {
-    return res.json(await this.crudActions.getEntity({ id: req.params.id }));
-  });
-
-  updateMuscle = errorHandler(async (req: Request, res: Response) => {
-    return res.json(
-      await this.crudActions.updateEntity(req.params.id, req.body)
-    );
-  });
-
-  deleteMuscle = errorHandler(async (req: Request, res: Response) => {
-    return res.json(await this.crudActions.deleteEntity(req.params.id));
-  });
+export class MuscleController extends GenericCrudController<Muscle> {
+  getAllMuscles = this.getAllEntites;
+  createMuscle = this.createEntity;
+  getMuscle = this.getEntityById;
+  updateMuscle = this.updateEntity;
+  deleteMuscle = this.deleteEntity;
 }

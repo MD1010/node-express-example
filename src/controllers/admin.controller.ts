@@ -1,17 +1,17 @@
-import { CrudActionsFactory } from "./utils/controller-factory";
+import { DbEnity } from "./../dal/genric-entity.dal";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { AdminEntity } from "../entities";
+import { Admin } from "../models";
 import { errorHandler } from "../utils/errorHandler";
 import { Exceptions } from "../utils/exceptions";
-import { Admin } from "../models";
-import { GenericCrudActions } from "./utils/generic-crud-actions";
+import { GenericDalActions } from "../dal/crud-actions.dal";
 
-export class AdminController extends CrudActionsFactory<Admin> {
+export class AdminController {
+  constructor(private dbEntity: DbEnity<Admin>) {}
   login = errorHandler(async (req: Request, res: Response) => {
     const { username, password } = req.body;
-    const admin = await this.crudActions.getEntity({ username });
+    const admin = await this.dbEntity.findOne({ username });
 
     if (!admin || !bcrypt.compareSync(password, admin.password))
       throw Exceptions.WRONG_CREDENTIALS;
