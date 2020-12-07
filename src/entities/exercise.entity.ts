@@ -5,7 +5,7 @@ import { Exercise } from "../models";
 const ExerciseSchema: Schema = new Schema({
   name: { type: String, required: true },
   description: { type: String },
-  url: { type: String },
+  url: { type: String, required: true },
   muscles: [{ type: mongoose.Types.ObjectId, required: true, ref: "Muscle" }],
   difficulty: { type: Schema.Types.Number, required: true },
   notes: { type: Schema.Types.String },
