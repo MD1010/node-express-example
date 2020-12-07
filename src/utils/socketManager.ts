@@ -11,7 +11,7 @@ function listenToEvents() {
 export function initSocketManager() {
   socketServer = new Server(http, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: process.env.REACT_CLIENT_HOST,
     },
   });
 
