@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { Post } from "../models";
 import { GenericCrudController } from "./utils/generic-crud.controller";
 
