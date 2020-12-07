@@ -1,7 +1,6 @@
-import { PostEntity } from "./../entities/post.entity";
 import { Router } from "express";
-import { MuscleEntity } from "../entities";
-import { MuscleController, PostController } from "./../controllers";
+import { PostController } from "./../controllers";
+import { PostEntity } from "./../entities/post.entity";
 
 export const postRouter = Router();
 const postController = new PostController(PostEntity);
