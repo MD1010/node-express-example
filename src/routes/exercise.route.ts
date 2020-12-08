@@ -9,6 +9,7 @@ export const exerciseRouter = Router();
 const exerciseController = new ExerciseController(ExerciseEntity);
 
 exerciseRouter.get("/", exerciseController.getAllExercises);
+exerciseRouter.get("/groupByTags", exerciseController.groupByTags);
 exerciseRouter.post("/", exerciseController.createExercise);
 exerciseRouter.put("/:id", exerciseController.updateExercise);
 exerciseRouter.get("/:id", exerciseController.getExercise);

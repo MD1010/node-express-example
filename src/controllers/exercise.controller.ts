@@ -11,4 +11,8 @@ export class ExerciseController extends GenericCrudController<Exercise> {
   getExercise = this.getEntityById;
   updateExercise = this.updateEntity;
   deleteExercise = this.deleteEntity;
+
+  groupByTags =  errorHandler(async (req: Request, res: Response) => {
+    return res.json(await this.dbEntity.ExericesGroupByTags());
+  });
 }

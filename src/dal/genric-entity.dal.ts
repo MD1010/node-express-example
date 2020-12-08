@@ -64,136 +64,62 @@ export class DbEnity<T extends Document>
       });
   }
 
-  groupByTags = () => {
+  // exrecise controller
+  ExericesGroupByTags = () => {
 
-  //   return this._model.aggregate([
-      
-  //     {$unwind:"$exercises"},
-  //     {$unwind:"$exercises.muscles"},
-  //     {$lookup: {
-  //         from: 'muscles', 
-  //         localField: 'items.items.school', 
-  //         foreignField: '_id', 
-  //         as: 'schoolInfo'}},
-  //     {$unwind:"$schoolInfo"},
-  //     {$project:{
-  //         "_id":1,
-  //         "items":[{
-  //             "name":"$items.name",
-  //             "items":[{
-  //             "school":"$schoolInfo._id"    ,
-  //             "grad":"$items.items.grad"    ,
-  //             "schoolInfo":"$schoolInfo"
-  //             }]
-  //         }]            
-  //     }}
-  // ])
-
-
-
-
-
-
-
-    return this._model.aggregate([
-      {
-      $lookup: {
-        from: "exercises",
-        localField: "exercises",
-        foreignField: "_id",
-        as: "exercises"
-      }
-    }, {
-      $unwind: {
-        path: "$exercises",
-        preserveNullAndEmptyArrays: true
-      }
-    }, {
-      $lookup: {
-        from: "muscles",
-        localField: "muscles",
-        foreignField: "_id",
-        as: "muscles",
-      }
+  return this._model.aggregate([
+    {
+        $lookup: {
+          from: "muscles",
+          localField: "muscles",
+          foreignField: "_id",
+          as: "muscles"
+        }
     },
-    // {
-    //   $unwind: {
-    //     path: "$muscles",
-    //     preserveNullAndEmptyArrays: true
-    //   }
-    // },
-     {
+    {
       $group: {
-        "_id":"$tags",
-
-         exercisesList: { $push: "$exercises" },
-        // trainigs: {$push:{id:"$_id", name:"$name", excercises: "$exercises"}},
-      }
-    }, {
-      $project: {
-        _id: 1,
-        exercisesList: 1,
-        muscles: 1
+         "_id":"$tags",
+        excercises: {$push:{id:"$_id", name:"$name", muscles: "$muscles"}},
       }
     }])
     .then((result) => {
-    return result as T[]
-  })
-  .catch((error: Error) => {
-      throw error;
-    });
+      return result as T[]
+    })
+    .catch((error: Error) => {
+        throw error;
+      });
+    }
 
 
+    groupByTags = () => {
 
-
-
-
-
-
-
-  //   return this._model.aggregate([
-  // {
-  //     $lookup: {
-  //         from: "exercises",
-  //         localField: "exercises",
-  //         foreignField: "_id",
-  //         as: "exercises"
-  //     }
-  // },
-  // {
-  //     $unwind: {
-  //         path: "$exercises",
-  //         preserveNullAndEmptyArrays: true
-  //     }
-  // },
-  // {
-  //     $group: {
-  //         "_id":"$tags",
-  //         trainigs: {$push:{id:"$_id", name:"$name", excercises: "$exercises"}},
-  //         // exercisesList: {
-  //         //     $push: "$exercises"
-  //         // },
-  //         // name: {
-  //         //     $first: "$name"
-  //         // }
-  //     }
-  // }])
-  // .then((result) => {
-  //   return result as T[]
-  // })
-  // .catch((error: Error) => {
-  //     throw error;
-  //   });
-
-
-
-
-    // return this._model.aggregate([{$unwind:"$tags"},{$group:{"_id":"$tags", "trainigs":{$push:{id:"$_id", name:"$name", excercises: "$exercises"}}}}])
-    // .then((result) => {
-    //   return result as T[]
-    // })
-    // .catch((error: Error) => {
-    //     throw error;
-    //   });
+      return this._model.aggregate([
+        {
+        $lookup: {
+          from: "exercises",
+          localField: "exercises",
+          foreignField: "_id",
+          as: "exercises"
+        },
+        
+      },
+      {
+        $group: {
+          "_id":"$tags",
+          trainings: {$push:{id:"$_id", name:"$name", excercises: "$exercises"}},
+        }
+      }, {
+        $project: {
+          _id: 1,
+          trainings: 1,
+        }
+      }])
+      .then((result) => {
+      return result as T[]
+    })
+    .catch((error: Error) => {
+        throw error;
+      });
   }
+
 }
