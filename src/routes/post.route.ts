@@ -1,10 +1,8 @@
-import { PostEntity } from "./../entities/post.entity";
 import { Router } from "express";
-import { MuscleEntity } from "../entities";
-import { MuscleController, PostController } from "./../controllers";
+import { PostController } from "./../controllers";
 
 export const postRouter = Router();
-const postController = new PostController(PostEntity);
+const postController = new PostController();
 
 postRouter.get("/", postController.getAllPosts);
 postRouter.post("/", postController.createPost);

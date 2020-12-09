@@ -1,9 +1,12 @@
-import { Request, Response } from "express";
-import { errorHandler } from "../utils/errorHandler";
 import { Tag } from "../models";
 import { GenericCrudController } from "./utils/generic-crud.controller";
+import { TagEntity } from "../entities";
 
 export class TagController extends GenericCrudController<Tag> {
+
+  constructor() {
+    super(TagEntity)
+  }
   getAllTags = this.getAllEntites;
   createTag = this.createEntity;
   getTag = this.getEntityById;

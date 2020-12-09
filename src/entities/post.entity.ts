@@ -1,6 +1,5 @@
-import mongoose, { Model, Schema } from "mongoose";
+import { Schema } from "mongoose";
 import { Post } from "../models";
-import { Document } from "mongoose";
 import { DbEnity } from "../dal/genric-entity.dal";
 
 const PostSchema: Schema = new Schema({

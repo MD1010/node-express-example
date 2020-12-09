@@ -1,9 +1,8 @@
 import { Router } from "express";
-import { TrainingEntity } from "../entities";
 import { TrainingController } from "./../controllers";
 
 export const trainingRouter = Router();
-const trainingController = new TrainingController(TrainingEntity);
+const trainingController = new TrainingController();
 
 trainingRouter.get("/", trainingController.getAllTrainings);
 trainingRouter.get("/groupByTags", trainingController.groupByTags);

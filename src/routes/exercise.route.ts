@@ -1,12 +1,8 @@
 import { ExerciseController } from "./../controllers";
-import { Request, Response, Router } from "express";
-import { AdminController } from "../controllers";
-import { errorHandler } from "../utils/errorHandler";
-import { Exercise } from "../models";
-import { ExerciseEntity } from "../entities";
+import { Router } from "express";
 
 export const exerciseRouter = Router();
-const exerciseController = new ExerciseController(ExerciseEntity);
+const exerciseController = new ExerciseController();
 
 exerciseRouter.get("/", exerciseController.getAllExercises);
 exerciseRouter.get("/groupByTags", exerciseController.groupByTags);

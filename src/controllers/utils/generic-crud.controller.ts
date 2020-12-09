@@ -2,7 +2,6 @@ import { DbEnity } from "../../dal/genric-entity.dal";
 import { Request, Response } from "express";
 import { Document } from "mongoose";
 import { errorHandler } from "../../utils/errorHandler";
-import { GenericDalActions } from "../../dal/crud-actions.dal";
 
 export abstract class GenericCrudController<T extends Document> {
   constructor(protected dbEntity: DbEnity<T>) {}
