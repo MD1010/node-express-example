@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
-import { Exercise } from "../models";
-import { GenericCrudController } from "./utils/generic-crud.controller";
-import {ExerciseDAL} from "../dal/exercise.dal"
+import { ExerciseDAL } from "../dal/exercise.dal";
 import { ExerciseEntity } from "../entities";
-import { throws } from "assert";
+import { Exercise } from "../models";
 import { errorHandler } from "../utils/errorHandler";
 import { socketServer } from "../utils/socketManager";
+import { GenericCrudController } from "./utils/generic-crud.controller";
 
 export class ExerciseController extends GenericCrudController<Exercise> {
   constructor() {
