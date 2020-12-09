@@ -1,6 +1,6 @@
-import { DbEnity } from "../../dal/genric-entity.dal";
 import { Request, Response } from "express";
 import { Document } from "mongoose";
+import { DbEnity } from "../../dal/genric-entity.dal";
 import { errorHandler } from "../../utils/errorHandler";
 
 export abstract class GenericCrudController<T extends Document> {

@@ -1,6 +1,7 @@
 import { Schema } from "mongoose";
 import { Muscle } from "../models";
 import { DbEnity } from "../dal/genric-entity.dal";
+import { Muscle } from "../models";
 
 const MuscleSchema: Schema = new Schema({
   name: { type: String, required: true },

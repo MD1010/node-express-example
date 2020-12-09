@@ -4,6 +4,7 @@ import { Training } from "../models";
 import { GenericCrudController } from "./utils/generic-crud.controller";
 import {TrainingDAL} from "../dal/trainings.dal"
 import { TrainingEntity } from "../entities";
+import { socketServer } from "../utils/socketManager";
 
 export class TrainingController extends GenericCrudController<Training> {
   
@@ -12,7 +13,11 @@ export class TrainingController extends GenericCrudController<Training> {
   }
 
   getAllTrainings = this.getAllEntites;
-  createTraining = this.createEntity;
+  createTraining = errorHandler(async (req: Request, res: Response) => {
+    let response = await this.dbEntity.create(req.body);
+    socketServer.sockets.emit("new_training");
+    res.json(response);
+  });
   getTraining = this.getEntityById;
   updateTraining = this.updateEntity;
   deleteTraining = this.deleteEntity;

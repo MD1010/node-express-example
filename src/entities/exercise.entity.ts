@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-import { Exercise } from "../models";
 import { DbEnity } from "../dal/genric-entity.dal";
+import { Exercise } from "../models";
 
 const ExerciseSchema: Schema = new Schema({
   name: { type: String, required: true },

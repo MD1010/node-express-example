@@ -1,9 +1,9 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import { toObjectId } from "../utils/base-id";
 import {
   IReadEntity,
   IWriteEntity,
 } from "../interfaces/generic-crud.interface";
+import { toObjectId } from "../utils/base-id";
 
 export class DbEnity<T extends Document>
   implements IReadEntity<T>, IWriteEntity<T> {
