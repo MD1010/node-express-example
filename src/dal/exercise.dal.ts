@@ -24,11 +24,11 @@ export namespace ExerciseDAL {
       {
         $group: {
           "_id":"$tag",
-          excercises: {$push:{id:"$_id", name:"$name", muscles: "$muscles"}},
+          excerices: {$push:{id:"$_id", name:"$name", muscles: "$muscles"}},
         }
       }])
       .then((result) => {
-        return result as Exercise[]
+        return result 
       })
       .catch((error: Error) => {
           throw error;

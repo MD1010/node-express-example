@@ -1,10 +1,10 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { AdminEntity } from "../entities";
 import { Admin } from "../models";
 import { errorHandler } from "../utils/errorHandler";
 import { Exceptions } from "../utils/exceptions";
-import { AdminEntity } from "../entities";
 import { DbEnity } from "./../dal/genric-entity.dal";
 
 export class AdminController {
