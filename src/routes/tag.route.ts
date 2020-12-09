@@ -1,9 +1,8 @@
 import { Router } from "express";
 import { TagController } from "./../controllers";
-import { TagEntity } from "./../entities/tag.entity";
 
 export const tagRouter = Router();
-const tagController = new TagController(TagEntity);
+const tagController = new TagController();
 
 tagRouter.get("/", tagController.getAllTags);
 tagRouter.post("/", tagController.createTag);

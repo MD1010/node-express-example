@@ -7,10 +7,14 @@ import { toObjectId } from "../utils/base-id";
 
 export class DbEnity<T extends Document>
   implements IReadEntity<T>, IWriteEntity<T> {
-  private _model: Model<Document>;
+  protected _model: Model<Document>;
 
   constructor(modelName: string, schema: Schema) {
     this._model = mongoose.model(modelName, schema);
+  }
+
+  getModel = () => {
+    return this._model
   }
 
   create(entity: T) {
@@ -63,4 +67,61 @@ export class DbEnity<T extends Document>
         throw error;
       });
   }
+
+  // exrecise controller
+  ExericesGroupByTags = () => {
+    return this._model.aggregate([
+      {
+          $lookup: {
+            from: "muscles",
+            localField: "muscles",
+            foreignField: "_id",
+            as: "muscles"
+          }
+      },
+      {
+        $group: {
+          "_id":"$tags",
+          excercises: {$push:{id:"$_id", name:"$name", muscles: "$muscles"}},
+        }
+      }])
+      .then((result) => {
+        return result as T[]
+      })
+      .catch((error: Error) => {
+          throw error;
+        });
+  }
+
+  // training controller
+  TrainingsGroupByTags = () => {
+    return this._model.aggregate([
+      {
+        $lookup: {
+          from: "exercises",
+          localField: "exercises",
+          foreignField: "_id",
+          as: "exercises"
+        }  
+      },
+      {
+        $group: {
+          "_id":"$tags",
+          trainings: {$push:{id:"$_id", name:"$name", excercises: "$exercises"}},
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          trainings: 1,
+        }
+      }])
+      .then((result) => {
+      return result as T[]
+    })
+    .catch((error: Error) => {
+        throw error;
+      });
+  }
+
 }

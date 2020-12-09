@@ -1,9 +1,8 @@
 import { Router } from "express";
-import { MuscleEntity } from "../entities";
 import { MuscleController } from "./../controllers";
 
 export const muscleRouter = Router();
-const muscleController = new MuscleController(MuscleEntity);
+const muscleController = new MuscleController();
 
 muscleRouter.get("/", muscleController.getAllMuscles);
 muscleRouter.post("/", muscleController.createMuscle);

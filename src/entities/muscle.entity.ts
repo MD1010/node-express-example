@@ -1,4 +1,5 @@
 import { Schema } from "mongoose";
+import { Muscle } from "../models";
 import { DbEnity } from "../dal/genric-entity.dal";
 import { Muscle } from "../models";
 

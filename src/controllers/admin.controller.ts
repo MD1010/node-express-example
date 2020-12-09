@@ -4,10 +4,16 @@ import jwt from "jsonwebtoken";
 import { Admin } from "../models";
 import { errorHandler } from "../utils/errorHandler";
 import { Exceptions } from "../utils/exceptions";
+import { AdminEntity } from "../entities";
 import { DbEnity } from "./../dal/genric-entity.dal";
 
 export class AdminController {
-  constructor(private dbEntity: DbEnity<Admin>) {}
+  private dbEntity!: DbEnity<Admin>
+
+  constructor() {
+    this.dbEntity = AdminEntity
+  }
+
   login = errorHandler(async (req: Request, res: Response) => {
     const { username, password } = req.body;
     const admin = await this.dbEntity.findOne({ username });

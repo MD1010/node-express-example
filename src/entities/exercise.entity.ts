@@ -12,6 +12,7 @@ const ExerciseSchema: Schema = new Schema({
   sets: { type: Schema.Types.Number, required: true },
   reps: { type: Schema.Types.Number, required: true },
   restTime: { type: Schema.Types.Number, required: true },
+  tags: [{ type: Schema.Types.ObjectId, required: true, ref: "Tag" }], 
 });
 
 export const ExerciseEntity = new DbEnity<Exercise>("Exercise", ExerciseSchema);
