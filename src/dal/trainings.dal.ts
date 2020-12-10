@@ -25,7 +25,11 @@ export namespace TrainingDAL {
           as: "tags"
         }  
       },
-      { "$unwind": "$exercises" },
+      { $unwind:{
+        path: "$exercises",
+        preserveNullAndEmptyArrays: true
+        }  
+    },
       {
         $lookup: {
           from: "muscles",
@@ -45,8 +49,8 @@ export namespace TrainingDAL {
       {
         $group: {
           "_id":"$_id",
-          trainingTags: {$push:"$tags"},
-          trainingName: {$push: "$name"},
+          trainingTags: {$first:"$tags"},
+          trainingName: {$first: "$name"},
           exercises: {$push:"$exercises" },
         }
       },
@@ -77,7 +81,11 @@ export namespace TrainingDAL {
           as: "tags"
         }  
       },
-      { "$unwind": "$exercises" },
+      { $unwind:{
+        path: "$exercises",
+        preserveNullAndEmptyArrays: true
+        }  
+    },
       {
         $lookup: {
           from: "muscles",
@@ -97,7 +105,8 @@ export namespace TrainingDAL {
       {
         $group: {
           "_id":"$tags",
-          trainings: {$push:{id:"$_id", name:"$name", excercises: "$exercises"}},
+
+          trainings: {$push:{id:"$_id", name:"$name", exercises: "$exercises"}},
         }
       },
       ])
