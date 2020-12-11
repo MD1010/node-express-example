@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Document } from "mongoose";
-import { DbEnity } from "../../dal/genric-entity.dal";
-import { errorHandler } from "../../utils/errorHandler";
+import { DbEnity } from "../../dal";
+import { errorHandler } from "../../utils";
 
 export abstract class GenericCrudController<T extends Document> {
   constructor(protected dbEntity: DbEnity<T>) {}
@@ -17,7 +17,7 @@ export abstract class GenericCrudController<T extends Document> {
 
   protected getEntityById = errorHandler(
     async (req: Request, res: Response) => {
-      return res.json(await this.dbEntity.findOne({ id: req.params.id }));
+      return res.json(await this.dbEntity.findOne({ _id: req.params.id }));
     }
   );
 
