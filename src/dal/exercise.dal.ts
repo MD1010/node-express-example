@@ -57,11 +57,20 @@ export namespace ExerciseDAL {
         {
           $group: {
             _id: "$tag",
+            tag: {$first: "$tag"},
             excerices: {
-              $push: { id: "$_id", name: "$name", muscles: "$muscles" },
+              $push: { id: "$_id", name: "$name", description: "$description", url:"$url", muscles: "$muscles", difficulty: "$difficulty",
+                      notes: "$notes", sets:"$sets", reps:"$reps", restTime: "$restTime", tag: "$tag"},
             },
           },
         },
+        {
+          $project: {
+            _id: 0,
+            tag: 1,
+            excerices: 1
+          }
+        }
       ])
       .then((result) => {
         return result;
