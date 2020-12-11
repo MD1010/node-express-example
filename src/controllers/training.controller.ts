@@ -13,15 +13,18 @@ export class TrainingController extends GenericCrudController<Training> {
   }
 
   getAllTrainings = this.getAllEntites;
-  createTraining = errorHandler(async (req: Request, res: Response) => {
-    let response = await this.dbEntity.create(req.body);
-    socketServer.sockets.emit("new_training");
-    res.json(response);
-  });
   getTraining = this.getEntityById;
   updateTraining = this.updateEntity;
   deleteTraining = this.deleteEntity;
   groupByTags =  errorHandler(async (req: Request, res: Response) => {
     return res.json(await TrainingDAL.TrainingsGroupByTags());
+  });
+  getTrainingsByName = errorHandler(async (req: Request, res: Response) => {
+    return res.json(await TrainingDAL.getTrainingsByName(req.params.name));
+  });
+  createTraining = errorHandler(async (req: Request, res: Response) => {
+    let response = await this.dbEntity.create(req.body);
+    socketServer.sockets.emit("new_training");
+    res.json(response);
   });
 }
