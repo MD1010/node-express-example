@@ -3,7 +3,7 @@ import {
   IReadEntity,
   IWriteEntity,
 } from "../interfaces/generic-crud.interface";
-import { toObjectId } from "../utils/base-id";
+import { toObjectId } from "./../utils/base-id";
 
 export class DbEnity<T extends Document>
   implements IReadEntity<T>, IWriteEntity<T> {
@@ -14,8 +14,8 @@ export class DbEnity<T extends Document>
   }
 
   getModel = () => {
-    return this._model
-  }
+    return this._model;
+  };
 
   create(entity: T) {
     return this._model
@@ -67,5 +67,4 @@ export class DbEnity<T extends Document>
         throw error;
       });
   }
-
 }
