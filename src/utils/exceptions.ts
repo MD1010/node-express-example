@@ -3,7 +3,7 @@ export interface IServerException {
   code: number;
 }
 export namespace Exceptions {
-  export const WRONG_CREDENTIALS: IServerException = {
+  export const UNAUTHORIZED: IServerException = {
     message: "Wrong Credentials, please try again",
     code: 401,
   };
