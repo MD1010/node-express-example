@@ -1,9 +1,6 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import {
-  IReadEntity,
-  IWriteEntity,
-} from "../interfaces/generic-crud.interface";
-import { toObjectId } from "./../utils/base-id";
+import { IReadEntity, IWriteEntity } from "../interfaces";
+import { Exceptions, toObjectId } from "../utils";
 
 export class DbEnity<T extends Document>
   implements IReadEntity<T>, IWriteEntity<T> {
@@ -17,10 +14,22 @@ export class DbEnity<T extends Document>
     return this._model;
   };
 
-  create(entity: T) {
+  async create(entity: T) {
+    if (entity._id) {
+      throw Exceptions.BAD_REQUEST;
+    }
+    if ((entity as Object).hasOwnProperty("name")) {
+      const res = await this._model.findOne({ name: (entity as any).name });
+      if (res) throw Exceptions.ENTITY_EXISTS;
+    }
     return this._model
       .create(entity)
-      .then((data) => data as T)
+      .then((res) => {
+        if (!res) {
+          throw Exceptions.CREATE_FAILED;
+        }
+        return res as T;
+      })
       .catch((error: Error) => {
         throw error;
       });
@@ -29,7 +38,11 @@ export class DbEnity<T extends Document>
   updateOne(id: string, entity: T) {
     return this._model
       .updateOne({ _id: toObjectId(id) }, entity)
-      .then((data) => data)
+      .then((res) => {
+        if (!res.nModified) {
+          throw Exceptions.UPDATE_FAILED;
+        }
+      })
       .catch((error: Error) => {
         throw error;
       });
@@ -38,8 +51,10 @@ export class DbEnity<T extends Document>
   deleteOne(id: string) {
     return this._model
       .deleteOne({ _id: toObjectId(id) })
-      .then((data) => {
-        return data;
+      .then((res) => {
+        if (!res.deletedCount) {
+          throw Exceptions.DELETE_FAILED;
+        }
       })
       .catch((error: Error) => {
         throw error;
@@ -61,7 +76,7 @@ export class DbEnity<T extends Document>
     return this._model
       .find()
       .then((result) => {
-        return result as T[];
+        return (result as T[]) || [];
       })
       .catch((error: Error) => {
         throw error;
