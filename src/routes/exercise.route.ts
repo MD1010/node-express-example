@@ -4,8 +4,6 @@ import { Router } from "express";
 export const exerciseRouter = Router();
 const exerciseController = new ExerciseController();
 
-// api/exercise/(chest | arms)
-
 exerciseRouter.get("/", exerciseController.getAllExercises);
 exerciseRouter.get("/tag/:name", exerciseController.getExercisesByTag);
 exerciseRouter.get("/groupByTags", exerciseController.groupByTags);

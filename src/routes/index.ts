@@ -1,4 +1,4 @@
-export { adminRouter } from "./admin.route";
+export { userRouter } from "./user.route";
 export { exerciseRouter } from "./exercise.route";
 export { muscleRouter } from "./muscle.route";
 export { postRouter } from "./post.route";
