@@ -105,8 +105,8 @@ export namespace TrainingDAL {
       {
         $group: {
           "_id":"$tags",
-
-          trainings: {$push:{id:"$_id", name:"$name", exercises: "$exercises"}},
+          exercises: {$push: "$exercises"},
+          trainings: {$push:{id:"$_id", name:"$name"}},
         }
       },
       ])

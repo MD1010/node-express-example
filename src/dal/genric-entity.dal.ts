@@ -58,8 +58,14 @@ export class DbEnity<T extends Document>
   }
 
   findAll() {
+    //console.log( this._model.schema.paths)
     return this._model
       .find()
+      .populate({
+        path: "exercises",
+        populate: {path: "muscles"}
+      })
+      .populate("tags")
       .then((result) => {
         return result as T[];
       })

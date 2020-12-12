@@ -28,7 +28,7 @@ export namespace ExerciseDAL {
         },
       ])
       .then((result) => {
-        return result as Exercise[];
+        return result;
       })
       .catch((error: Error) => {
         throw error;
