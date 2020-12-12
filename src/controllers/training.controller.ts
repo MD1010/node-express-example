@@ -2,21 +2,22 @@ import { Request, Response } from "express";
 import { errorHandler } from "../utils/errorHandler";
 import { Training } from "../models";
 import { GenericCrudController } from "./utils/generic-crud.controller";
-import {TrainingDAL} from "../dal/trainings.dal"
+import { TrainingDAL } from "../dal/trainings.dal";
 import { TrainingEntity } from "../entities";
 import { socketServer } from "../utils/socketManager";
+import { ITraining } from "gymstagram-common";
+import { orderBy } from "lodash";
 
 export class TrainingController extends GenericCrudController<Training> {
-  
   constructor() {
-    super(TrainingEntity)
+    super(TrainingEntity);
   }
 
   getAllTrainings = this.getAllEntites;
   getTraining = this.getEntityById;
   updateTraining = this.updateEntity;
   deleteTraining = this.deleteEntity;
-  groupByTags =  errorHandler(async (req: Request, res: Response) => {
+  groupByTags = errorHandler(async (req: Request, res: Response) => {
     return res.json(await TrainingDAL.TrainingsGroupByTags());
   });
   getTrainingsByName = errorHandler(async (req: Request, res: Response) => {
@@ -26,5 +27,11 @@ export class TrainingController extends GenericCrudController<Training> {
     let response = await this.dbEntity.create(req.body);
     socketServer.sockets.emit("new_training");
     res.json(response);
+  });
+  getSortedTrainings = errorHandler(async (req: Request, res: Response) => {
+    let sortBy = req.params.sortBy;
+    let trainings = await this.dbEntity.findAll();
+    let sortedTrainings: ITraining[] = orderBy(trainings, [sortBy], ["desc"]);
+    res.json(sortedTrainings);
   });
 }
