@@ -15,4 +15,5 @@ const ExerciseSchema: Schema = new Schema({
   tags: [{ type: Schema.Types.ObjectId, required: true, ref: "Tag" }], 
 });
 
+
 export const ExerciseEntity = new DbEnity<Exercise>("Exercise", ExerciseSchema);

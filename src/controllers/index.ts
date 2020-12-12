@@ -1,4 +1,4 @@
-export { AdminController } from "./admin.controller";
+export { UserController } from "./user.controller";
 export { ExerciseController } from "./exercise.controller";
 export { MuscleController } from "./muscle.controller";
 export { PostController } from "./post.controller";

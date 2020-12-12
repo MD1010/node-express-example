@@ -1,75 +1,64 @@
-import { ExerciseEntity, TagEntity } from "../entities";
-import { Exercise, Tag, Training } from "../models";
-import { toObjectId } from "../utils/base-id";
+import { UserEntity } from "../entities";
 
 export namespace UserDAL {
-  export const TrainingsByTags = async (tagName: string) => {
-    const tag = await TagEntity.findOne({ name: tagName });
-    return ExerciseEntity.getModel()
+  export const TrainingsByTags = async (username: string, day: string) => {
+    return UserEntity.getModel()
       .aggregate([
         {
-          $match: { tag: toObjectId(tag._id) },
+          $match: { username: username },
+        },
+        {
+            $unwind: {
+                path: "$trainings",
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $match: { "trainings.day": parseInt(day) },
+          },
+        {
+          $lookup: {
+            from: "exercises",
+            localField: "trainings.exercises",
+            foreignField: "_id",
+            as: "trainings.exercises",
+          },
+        },
+        {
+            $unwind: {
+                path: "$trainings.exercises",
+                preserveNullAndEmptyArrays: true
+            }
         },
         {
           $lookup: {
             from: "muscles",
-            localField: "muscles",
+            localField: "trainings.exercises.muscles",
             foreignField: "_id",
-            as: "muscles",
+            as: "trainings.exercises.muscles",
           },
         },
         {
           $lookup: {
             from: "tags",
-            localField: "tag",
+            localField: "trainings.exercises.tag",
             foreignField: "_id",
-            as: "tag",
-          },
-        },
-      ])
-      .then((result) => {
-        return result;
-      })
-      .catch((error: Error) => {
-        throw error;
-      });
-  };
-
-  export const ExericesGroupByTags = () => {
-    return ExerciseEntity.getModel()
-      .aggregate([
-        {
-          $lookup: {
-            from: "muscles",
-            localField: "muscles",
-            foreignField: "_id",
-            as: "muscles",
+            as: "trainings.exercises.tag",
           },
         },
         {
-          $lookup: {
-            from: "tags",
-            localField: "tag",
-            foreignField: "_id",
-            as: "tag",
-          },
+            $group: {
+                "_id": "$trainings.exercises.tag",
+                tag:{$first: "$trainings.exercises.tag"},
+                exercises: {$push: "$trainings.exercises"}
+            }
         },
         {
-          $group: {
-            _id: "$tag",
-            tag: {$first: "$tag"},
-            excerices: {
-              $push: { id: "$_id", name: "$name", description: "$description", url:"$url", muscles: "$muscles", difficulty: "$difficulty",
-                      notes: "$notes", sets:"$sets", reps:"$reps", restTime: "$restTime", tag: "$tag"},
-            },
-          },
-        },
-        {
-          $project: {
-            _id: 0,
-            tag: 1,
-            excerices: 1
-          }
+            $project: {
+                "_id": 0,
+                tag: 1,
+                exercises: 1
+            }
         }
       ])
       .then((result) => {

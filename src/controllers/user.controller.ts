@@ -13,7 +13,7 @@ export class UserController extends GenericCrudController<User> {
 
   getAllUsers = this.getAllEntites;
   getUserTrainingsByTags = errorHandler(async (req: Request, res: Response) => {
-    return res.json(await UserDAL.TrainingsByTags(req.params.name));
+    return res.json(await UserDAL.TrainingsByTags(req.params.username, req.params.day));
   });
 
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-  adminRouter,
+  userRouter,
   exerciseRouter,
   trainingRouter,
   tagRouter,
@@ -10,7 +10,7 @@ import {
 
 export const appRouter = Router();
 
-appRouter.use("/api/admin", adminRouter);
+appRouter.use("/api/user", userRouter);
 appRouter.use("/api/exercise", exerciseRouter);
 appRouter.use("/api/training", trainingRouter);
 appRouter.use("/api/tag", tagRouter);
