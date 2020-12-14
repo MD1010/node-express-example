@@ -6,7 +6,11 @@ import { TrainingDAL } from "../dal/trainings.dal";
 import { TrainingEntity } from "../entities";
 import { socketServer } from "../utils/socketManager";
 import { ITraining } from "gymstagram-common";
-import { orderBy } from "lodash";
+import { orderBy, result } from "lodash";
+import youtube from "scrape-youtube";
+import { log } from "console";
+import { Results, Video } from "scrape-youtube/lib/interface";
+import { generateTraining } from "./utils/generate-training";
 
 export class TrainingController extends GenericCrudController<Training> {
   constructor() {
@@ -33,5 +37,19 @@ export class TrainingController extends GenericCrudController<Training> {
     let trainings = await this.dbEntity.findAll();
     let sortedTrainings: ITraining[] = orderBy(trainings, [sortBy], ["desc"]);
     res.json(sortedTrainings);
+  });
+  scrapTrainings = errorHandler(async (req: Request, res: Response) => {
+    let serachExpression = req.body.searchText;
+    let tags = req.body.tags;
+    let results: Results = await youtube.search(serachExpression);
+    let training;
+    results.videos.map(async (video: Video) => {
+      training = generateTraining(video.title, video.link, tags);
+      let response = await this.dbEntity.create(training);
+    });
+
+    // res.json(Object.keys(results.video).length);
+    // res.json(Object.keys(results.videos[0]).length);
+    res.json(results.videos);
   });
 }
