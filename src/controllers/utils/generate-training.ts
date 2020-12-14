@@ -1,30 +1,23 @@
-import { List } from "lodash";
-function getRandomInt(maxNotInclude: number) {
-  return Math.floor(Math.random() * Math.floor(maxNotInclude));
-}
+import { ITraining, ExerciseDifficulty, ITag } from "gymstagram-common";
+import mongoose from "mongoose";
+import { difficultiesLenght, getRandomInt, urlParse } from "./scrap-helpers";
 
-let trainingsDifficultLevel = [
-  "Easy",
-  "Normal",
-  "Difficult",
-  "Hard",
-  "Exteme",
-  "Insane",
-];
-export const generateTraining = (name: string, video: string, tags: []) => {
+export const generateTraining = (
+  name: string,
+  video: string,
+  tags: ITag[]
+): ITraining => {
   //parsing youtube url for client component
-  const parsedVideo = video.replace("youtu.be", "www.youtube.com/embed");
+  const parsedVideo = urlParse(video);
+  const randomIndexOfDifficultLevel = getRandomInt(difficultiesLenght);
+  const difficultLevel = ExerciseDifficulty[randomIndexOfDifficultLevel];
   const createdAt = new Date();
-  const randomIndexOfDifficultLevel = getRandomInt(
-    trainingsDifficultLevel.length
-  );
-  const difficultLevel = trainingsDifficultLevel[randomIndexOfDifficultLevel];
 
   return {
-    tags: tags,
+    tags,
     exercises: [],
     video: parsedVideo,
-    name: name,
+    name,
     createdAt: createdAt,
     numOfLikes: 0,
     likedBy: [],

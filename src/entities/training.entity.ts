@@ -9,6 +9,8 @@ const TrainingSchema: Schema = new Schema({
   video: { type: String, required: true },
   createdAt: { type: Schema.Types.Date, required: true },
   numOfLikes: { type: Number, required: true },
+  likedBy: [{ type: String, required: true }],
+  difficultLevel: { type: String, required: true },
 });
 
 export const TrainingEntity = new DbEnity<Training>("Training", TrainingSchema);

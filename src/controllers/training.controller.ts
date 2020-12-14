@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, response, Response } from "express";
 import { errorHandler } from "../utils/errorHandler";
 import { Training } from "../models";
 import { GenericCrudController } from "./utils/generic-crud.controller";
@@ -8,7 +8,6 @@ import { socketServer } from "../utils/socketManager";
 import { ITraining } from "gymstagram-common";
 import { orderBy, result } from "lodash";
 import youtube from "scrape-youtube";
-import { log } from "console";
 import { Results, Video } from "scrape-youtube/lib/interface";
 import { generateTraining } from "./utils/generate-training";
 
@@ -42,14 +41,13 @@ export class TrainingController extends GenericCrudController<Training> {
     let serachExpression = req.body.searchText;
     let tags = req.body.tags;
     let results: Results = await youtube.search(serachExpression);
-    let training;
+
     results.videos.map(async (video: Video) => {
-      training = generateTraining(video.title, video.link, tags);
-      let response = await this.dbEntity.create(training);
+      const training = generateTraining(video.title, video.link, tags);
+
+      let response = await this.dbEntity.create(training as any);
     });
 
-    // res.json(Object.keys(results.video).length);
-    // res.json(Object.keys(results.videos[0]).length);
-    res.json(results.videos);
+    res.json(200);
   });
 }
