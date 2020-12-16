@@ -6,6 +6,7 @@ const ExerciseSchema: Schema = new Schema({
   name: { type: String, required: true },
   video: { type: String, required: true },
   difficulty: { type: Schema.Types.Number, required: true },
+  muscles: [{ type: Schema.Types.ObjectId, required: true, ref: "Muscle" }],
   sets: { type: Schema.Types.Number, required: true },
   reps: { type: Schema.Types.Number, required: true },
   restTime: { type: Schema.Types.Number, required: true },

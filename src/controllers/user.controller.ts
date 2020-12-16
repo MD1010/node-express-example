@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserDAL } from "../dal/user.dal";
 import { UserEntity } from "../entities";
+import {IUser} from "gymstagram-common"
 import { User } from "../models";
 import { errorHandler } from "../utils/errorHandler";
 import { socketServer } from "../utils/socketManager";
@@ -16,8 +17,8 @@ export class UserController extends GenericCrudController<User> {
 
   login = errorHandler(async (req: Request, res: Response) => {
     const { username, password } = req.body;
-    const user = await UserEntity.findOne({ username });
-
+    const user = await UserEntity.find({ username }) as unknown as IUser;
+    user
     if (!user || !user.isAdmin || !bcrypt.compareSync(password, user.password))
       throw Exceptions.UNAUTHORIZED;
 

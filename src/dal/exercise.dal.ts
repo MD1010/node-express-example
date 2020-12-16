@@ -1,14 +1,15 @@
 import { ExerciseEntity, TagEntity } from "../entities";
 import { Exercise, Tag, Training } from "../models";
 import { toObjectId } from "../utils/base-id";
+import {ITag} from "gymstagram-common"
 
 export namespace ExerciseDAL {
   export const getExercisesByTag = async (tagName: string) => {
-    const tag = await TagEntity.findOne({ name: tagName });
+    const tag = await TagEntity.find({ name: tagName }) as ITag;
     return ExerciseEntity.getModel()
       .aggregate([
         {
-          $match: { tag: toObjectId(tag._id) },
+          $match: { tag: toObjectId(tag._id!) },
         },
         {
           $lookup: {

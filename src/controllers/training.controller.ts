@@ -33,8 +33,8 @@ export class TrainingController extends GenericCrudController<Training> {
   });
   getSortedTrainings = errorHandler(async (req: Request, res: Response) => {
     let sortBy = req.params.sortBy;
-    let trainings = await this.dbEntity.findAll();
-    let sortedTrainings: ITraining[] = orderBy(trainings, [sortBy], ["desc"]);
+    let trainings = await this.dbEntity.find({});
+    let sortedTrainings = orderBy(trainings, [sortBy], ["desc"]);
     res.json(sortedTrainings);
   });
   // scrapTrainings = errorHandler(async (req: Request, res: Response) => {

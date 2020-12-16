@@ -8,19 +8,19 @@ export abstract class GenericCrudController<T extends Document> {
 
   protected getAllEntites = errorHandler(
     async (req: Request, res: Response) => {
-      return res.json(await this.dbEntity.findAll());
+      return res.json(await this.dbEntity.find({}));
     }
   );
 
   protected getEntityById = errorHandler(
     async (req: Request, res: Response) => {
-      return res.json(await this.dbEntity.findOne({ _id: req.params.id }));
+      return res.json(await this.dbEntity.find({ _id: req.params.id }));
     }
   );
 
   protected findEntityByFilter = errorHandler(
     async (req: Request, res: Response) => {
-      return res.json(await this.dbEntity.findOne(req.body));
+      return res.json(await this.dbEntity.find(req.body));
     }
   );
 

@@ -1,8 +1,5 @@
 export interface IReadEntity<T> {
-  findOne: (prop: any) => Promise<T | null> | any;
-
-  // for the meantime to the switch case in crud find all
-  findAll: () => Promise<T[]> | any;
+  find: (prop: any) => Promise<T | T[]> | any;
 }
 
 export interface IWriteEntity<T> {
