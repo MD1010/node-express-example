@@ -44,8 +44,7 @@ export class TrainingController extends GenericCrudController<Training> {
 
     results.videos.map(async (video: Video) => {
       const training = generateTraining(video.title, video.link, tags);
-
-      let response = await this.dbEntity.create(training as any);
+      // let response = await this.dbEntity.create(training as any);
     });
 
     res.json(200);
