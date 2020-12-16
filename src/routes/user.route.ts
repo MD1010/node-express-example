@@ -7,3 +7,5 @@ const userController = new UserController();
 userRouter.get("/:username/trainings/:day", userController.getUserTrainingsByTags);
 
 
+
+userRouter.post("/login", userController.login);

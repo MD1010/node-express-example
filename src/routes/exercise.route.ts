@@ -11,4 +11,4 @@ exerciseRouter.post("/", exerciseController.createExercise);
 exerciseRouter.put("/:id", exerciseController.updateExercise);
 exerciseRouter.get("/:id", exerciseController.getExercise);
 exerciseRouter.delete("/:id", exerciseController.deleteExercise);
-
+exerciseRouter.post("/scrapExercise", exerciseController.scrapExercise);

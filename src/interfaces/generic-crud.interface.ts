@@ -5,6 +5,6 @@ export interface IReadEntity<T> {
 
 export interface IWriteEntity<T> {
   create: (entity: T) => Promise<T>;
-  updateOne: (id: string, item: T) => Promise<any>;
-  deleteOne: (id: string) => Promise<any>;
+  updateOne: (id: string, item: T) => Promise<void>;
+  deleteOne: (id: string) => Promise<void>;
 }
