@@ -1,10 +1,11 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import {TrainingEntity} from "../entities"
+import {TrainingEntity,PostEntity,MuscleEntity,ExerciseEntity,TagEntity,UserEntity} from "../entities"
 import {
   IReadEntity,
   IWriteEntity,
 } from "../interfaces/generic-crud.interface";
 import { toObjectId } from "./../utils/base-id";
+import {Exceptions} from "../utils"
 
 export class DbEnity<T extends Document>
   implements IReadEntity<T>, IWriteEntity<T> {
@@ -66,23 +67,167 @@ export class DbEnity<T extends Document>
   }
 
   findOne(filter: { [key: string]: any }) {
-    return this._model
-      .findOne(filter)
-      .then((result) => {
-        return result as T;
-      })
-      .catch((error: Error) => {
-        throw error;
-      });
+    switch(this._model.modelName) {
+      case TrainingEntity._model.modelName:
+        return this._model
+        .findOne(filter)
+        .populate({
+          path: "exercises",
+          populate: {path: "muscles"}
+        })
+        .populate("tags")
+        .then((result) => {
+          return result as T;
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+      case UserEntity._model.modelName:
+        return this._model
+        .findOne(filter)
+        .populate({
+          path: "exercises",
+          populate: {path: "muscles"}
+        })
+        .populate("tags")
+        .then((result) => {
+          return result as T;
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+      case ExerciseEntity._model.modelName:
+        return this._model
+        .findOne(filter)
+        .populate("tag")
+        .then((result) => {
+          return result as T;
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+      case TagEntity._model.modelName:
+        return this._model
+        .findOne(filter)
+        .then((result) => {
+          return result as T;
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+      case PostEntity._model.modelName:
+        return this._model
+        .findOne(filter)
+        .populate(
+          {
+          path: "trainingID",
+          populate: [
+            {
+            path: "exercises",
+            populate: {path: "muscles"}
+            },
+            {
+              path: "tags"
+            }
+          ]
+        },
+        
+        )
+        .then((result) => {
+          return result as T;
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+     default:
+      throw Exceptions.ENTITY_DOES_NOT_EXISTS;
+    }
+
+
+
+
+
+    // return this._model
+    //   .findOne(filter)
+    //   .then((result) => {
+    //     return result as T;
+    //   })
+    //   .catch((error: Error) => {
+    //     throw error;
+    //   });
   }
 
   findAll() {
-    console.log(typeof(this._model))
-    console.log(this._model.modelName)
-    console.log(TrainingEntity instanceof this._model)
-    // switch(this._model) {
-    //   case User:
-    //     return this._model
+    switch(this._model.modelName) {
+      case TrainingEntity._model.modelName:
+        return this._model
+        .find()
+        .populate({
+          path: "exercises",
+          populate: {path: "muscles"}
+        })
+        .populate("tags")
+        .then((result) => {
+          return result as T[];
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+      case UserEntity._model.modelName:
+        return this._model
+        .find()
+        .populate({
+          path: "exercises",
+          populate: {path: "muscles"}
+        })
+        .populate("tags")
+        .then((result) => {
+          return result as T[];
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+      case ExerciseEntity._model.modelName:
+        return this._model
+        .find()
+        .populate("tag")
+        .then((result) => {
+          return result as T[];
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+      case TagEntity._model.modelName:
+        return this._model
+        .find()
+        .then((result) => {
+          return result as T[];
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+      case PostEntity._model.modelName:
+        return this._model
+        .find()
+        .populate({
+          path: "trainingID",
+          populate: {
+            path: "exercises",
+            populate: {path: "muscles"}
+          }
+        })
+        .then((result) => {
+          return result as T[];
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+     default:
+        return [] as T[] 
+    }
+
+    // ////////
+    // return this._model
     //   .find()
     //   .populate({
     //     path: "exercises",
@@ -90,26 +235,10 @@ export class DbEnity<T extends Document>
     //   })
     //   .populate("tags")
     //   .then((result) => {
-    //     return result as T[];
+    //     return (result as T[]) || [];
     //   })
     //   .catch((error: Error) => {
     //     throw error;
     //   });
-    // }
-
-    ////////
-    return this._model
-      .find()
-      .populate({
-        path: "exercises",
-        populate: {path: "muscles"}
-      })
-      .populate("tags")
-      .then((result) => {
-        return (result as T[]) || [];
-      })
-      .catch((error: Error) => {
-        throw error;
-      });
   }
 }

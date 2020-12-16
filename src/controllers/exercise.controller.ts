@@ -34,27 +34,27 @@ export class ExerciseController extends GenericCrudController<Exercise> {
     return res.json(await ExerciseDAL.ExericesGroupByTags());
   });
 
-  scrapExercise = errorHandler(async (req: Request, res: Response) => {
-    let doc: any;
+  // scrapExercise = errorHandler(async (req: Request, res: Response) => {
+  //   let doc: any;
 
-    Axios.get(
-      "https://www.liftlearngrow.com/blog-page/100-best-exercises-list"
-    ).then((res) => {
-      const dom = new JSDOM(res.data);
+  //   Axios.get(
+  //     "https://www.liftlearngrow.com/blog-page/100-best-exercises-list"
+  //   ).then((res) => {
+  //     const dom = new JSDOM(res.data);
 
-      let exerciseNames: string[] = [];
-      let exerciseVideos: string[] = [];
-      dom.window.document
-        .querySelectorAll("#block-72839eccdc60de5038fa > div > ul > li > p > a")
-        .forEach((item: any) => exerciseNames.push(item.textContent));
+  //     let exerciseNames: string[] = [];
+  //     let exerciseVideos: string[] = [];
+  //     dom.window.document
+  //       .querySelectorAll("#block-72839eccdc60de5038fa > div > ul > li > p > a")
+  //       .forEach((item: any) => exerciseNames.push(item.textContent));
 
-      dom.window.document
-        .querySelectorAll("#block-72839eccdc60de5038fa > div > ul > li > p > a")
-        .forEach((item: any) => exerciseVideos.push(item.href));
+  //     dom.window.document
+  //       .querySelectorAll("#block-72839eccdc60de5038fa > div > ul > li > p > a")
+  //       .forEach((item: any) => exerciseVideos.push(item.href));
 
-      generateExercise(exerciseNames, exerciseVideos);
-    });
+  //     generateExercise(exerciseNames, exerciseVideos);
+  //   });
 
-    res.json(200);
-  });
+  //   res.json(200);
+  // });
 }

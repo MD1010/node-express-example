@@ -1,5 +1,5 @@
 import { exerciseRouter } from "../../routes";
-import { ExerciseDifficulty } from "gymstagram-common";
+//import { ExerciseDifficulty } from "gymstagram-common";
 
 export const generateExercise = (names: string[], videos: string[]) => {
   let musclesMap = {

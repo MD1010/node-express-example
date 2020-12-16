@@ -30,12 +30,8 @@
     "dotenv": "^8.2.0",
     "express": "^4.16.3",
     "express-async-handler": "^1.1.4",
-<<<<<<< HEAD
-    "gymstagram-common": "^1.2.0",
-=======
-    "gymstagram-common": "^1.2.2",
+    "gymstagram-common": "^1.2.9",
     "jsdom": "^16.4.0",
->>>>>>> trainings-scraping
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "mongoose": "^5.10.18",

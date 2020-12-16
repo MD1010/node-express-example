@@ -9,7 +9,7 @@ import { ITraining } from "gymstagram-common";
 import { orderBy, result } from "lodash";
 import youtube from "scrape-youtube";
 import { Results, Video } from "scrape-youtube/lib/interface";
-import { generateTraining } from "./utils/generate-training";
+//import { generateTraining } from "./utils/generate-training";
 
 export class TrainingController extends GenericCrudController<Training> {
   constructor() {
@@ -37,17 +37,17 @@ export class TrainingController extends GenericCrudController<Training> {
     let sortedTrainings: ITraining[] = orderBy(trainings, [sortBy], ["desc"]);
     res.json(sortedTrainings);
   });
-  scrapTrainings = errorHandler(async (req: Request, res: Response) => {
-    let serachExpression = req.body.searchText;
-    let tags = req.body.tags;
-    let results: Results = await youtube.search(serachExpression);
+  // scrapTrainings = errorHandler(async (req: Request, res: Response) => {
+  //   let serachExpression = req.body.searchText;
+  //   let tags = req.body.tags;
+  //   let results: Results = await youtube.search(serachExpression);
 
-    results.videos.map(async (video: Video) => {
-      const training = generateTraining(video.title, video.link, tags);
+  //   results.videos.map(async (video: Video) => {
+  //     const training = generateTraining(video.title, video.link, tags);
 
-      let response = await this.dbEntity.create(training as any);
-    });
+  //     let response = await this.dbEntity.create(training as any);
+  //   });
 
-    res.json(200);
-  });
+  //   res.json(200);
+  // });
 }

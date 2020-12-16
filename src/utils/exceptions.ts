@@ -13,6 +13,11 @@ export namespace Exceptions {
     code: 409, // conflict
   };
 
+  export const ENTITY_DOES_NOT_EXISTS: IServerException = {
+    message: "Entity does not exists",
+    code: 404, // conflict
+  };
+
   export const CREATE_FAILED: IServerException = {
     message: "Entity failed to create",
     code: 500,
