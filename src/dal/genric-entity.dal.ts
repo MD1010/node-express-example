@@ -1,4 +1,5 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
+import {TrainingEntity} from "../entities"
 import {
   IReadEntity,
   IWriteEntity,
@@ -58,6 +59,26 @@ export class DbEnity<T extends Document>
   }
 
   findAll() {
+    console.log(typeof(this._model))
+    console.log(this._model.modelName)
+    console.log(TrainingEntity instanceof this._model)
+    // switch(this._model) {
+    //   case User:
+    //     return this._model
+    //   .find()
+    //   .populate({
+    //     path: "exercises",
+    //     populate: {path: "muscles"}
+    //   })
+    //   .populate("tags")
+    //   .then((result) => {
+    //     return result as T[];
+    //   })
+    //   .catch((error: Error) => {
+    //     throw error;
+    //   });
+    // }
+
     ////////
     return this._model
       .find()
