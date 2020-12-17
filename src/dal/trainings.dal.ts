@@ -19,10 +19,10 @@ export namespace TrainingDAL {
       },
       {
         $lookup: {
-          from: "tags",
-          localField: "tags",
+          from: "muscleGroups",
+          localField: "musclesGroups",
           foreignField: "_id",
-          as: "tags"
+          as: "musclesGroups"
         }  
       },
       { $unwind:{
@@ -40,16 +40,16 @@ export namespace TrainingDAL {
       },
       {
         $lookup: {
-          from: "tags",
-          localField: "exercises.tag",
+          from: "muscleGroup",
+          localField: "exercises.muscleGroup",
           foreignField: "_id",
-          as: "exercises.tag"
+          as: "exercises.muscleGroup"
         }  
       },
       {
         $group: {
           "_id":"$_id",
-          trainingTags: {$first:"$tags"},
+          trainingMuscleGroups: {$first:"$musclesGroups"},
           trainingName: {$first: "$name"},
           exercises: {$push:"$exercises" },
         }
@@ -63,7 +63,7 @@ export namespace TrainingDAL {
       });
   }
 
-  export const TrainingsGroupByTags = () => {
+export const groupByMuscleGroup = () => {
     return TrainingEntity.getModel().aggregate([
       {
         $lookup: {
@@ -75,10 +75,24 @@ export namespace TrainingDAL {
       },
       {
         $lookup: {
-          from: "tags",
-          localField: "tags",
+          from: "muscleGroups",
+          localField: "musclesGroups",
           foreignField: "_id",
-          as: "tags"
+          as: "musclesGroups"
+        }  
+      },
+      {
+        $unwind: {
+          path:"$musclesGroups",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $lookup: {
+          from: "muscles",
+          localField: "musclesGroups.muscles",
+          foreignField: "_id",
+          as: "musclesGroups.muscles"
         }  
       },
       { $unwind:{
@@ -89,26 +103,60 @@ export namespace TrainingDAL {
       {
         $lookup: {
           from: "muscles",
-          localField: "exercises.muscles",
+          localField: "exercises.muscles.primary",
           foreignField: "_id",
-          as: "exercises.muscles"
+          as: "exercises.muscles.primary"
         }  
       },
       {
         $lookup: {
-          from: "tags",
-          localField: "exercises.tag",
+          from: "muscles",
+          localField: "exercises.muscles.secondary",
           foreignField: "_id",
-          as: "exercises.tag"
+          as: "exercises.muscles.secondary"
         }  
       },
       {
-        $group: {
-          "_id":"$tags",
-          exercises: {$push: "$exercises"},
-          trainings: {$push:{id:"$_id", name:"$name"}},
+        $lookup: {
+          from: "muscleGroups",
+          localField: "exercises.muscleGroup",
+          foreignField: "_id",
+          as: "exercises.muscleGroup"
+        }  
+      },
+      {
+        $unwind: {
+          path: "$exercises.muscleGroup",
+        preserveNullAndEmptyArrays: true
+        }
+      }, 
+      {
+        $lookup: {
+          from: "muscles",
+          localField: "exercises.muscleGroup.muscles",
+          foreignField: "_id",
+          as: "exercises.muscleGroup.muscles"
         }
       },
+      {
+        $group: {
+          "_id":"$musclesGroups._id",
+          group: {$first: "$musclesGroups.name"},
+          trainingName: {$first: "$name"},
+          trainingMuscleGroups: {$push: "$musclesGroups"},
+          exercises: {$push: "$exercises"},
+          likedBy: {$push: "$likedBy"},
+          video: {$first: "$video"},
+          createdAt: {$first: "$createdAt"},
+          numOfLikes: {$first: "$numOfLikes"},
+          difficultyLevel: {$first: "$difficultyLevel"}
+        },
+      },
+      {
+        $project: {
+          "_id": 0
+        }
+      }
       ])
       .then((result) => {
       return result as Training[]

@@ -20,8 +20,8 @@ export class TrainingController extends GenericCrudController<Training> {
   getTraining = this.getEntityById;
   updateTraining = this.updateEntity;
   deleteTraining = this.deleteEntity;
-  groupByTags = errorHandler(async (req: Request, res: Response) => {
-    return res.json(await TrainingDAL.TrainingsGroupByTags());
+  groupByMuscleGroup = errorHandler(async (req: Request, res: Response) => {
+    return res.json(await TrainingDAL.groupByMuscleGroup());
   });
   getTrainingsByName = errorHandler(async (req: Request, res: Response) => {
     return res.json(await TrainingDAL.getTrainingsByName(req.params.name));
@@ -37,16 +37,4 @@ export class TrainingController extends GenericCrudController<Training> {
     let sortedTrainings = orderBy(trainings, [sortBy], ["desc"]);
     res.json(sortedTrainings);
   });
-  // scrapTrainings = errorHandler(async (req: Request, res: Response) => {
-  //   let serachExpression = req.body.searchText;
-  //   let tags = req.body.tags;
-  //   let results: Results = await youtube.search(serachExpression);
-
-    results.videos.map(async (video: Video) => {
-      // const training = generateTraining(video.title, video.link, tags);
-      // let response = await this.dbEntity.create(training as any);
-    });
-
-  //   res.json(200);
-  // });
 }

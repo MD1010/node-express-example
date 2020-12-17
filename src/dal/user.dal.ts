@@ -40,16 +40,16 @@ export namespace UserDAL {
         },
         {
           $lookup: {
-            from: "tags",
-            localField: "trainings.exercises.tag",
+            from: "musclesGroups",
+            localField: "trainings.exercises.musclesGroup",
             foreignField: "_id",
-            as: "trainings.exercises.tag",
+            as: "trainings.exercises.musclesGroup",
           },
         },
         {
             $group: {
-                "_id": "$trainings.exercises.tag",
-                tag:{$first: "$trainings.exercises.tag"},
+                "_id": "$trainings.exercises.musclesGroup",
+                tag:{$first: "$trainings.exercises.musclesGroup"},
                 exercises: {$push: "$trainings.exercises"}
             }
         },

@@ -1,5 +1,5 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import {TrainingEntity,PostEntity,MuscleEntity,ExerciseEntity,TagEntity,UserEntity} from "../entities"
+import {TrainingEntity,PostEntity,MuscleEntity,ExerciseEntity,UserEntity, MuscleGroupEntity} from "../entities"
 import {
   IReadEntity,
   IWriteEntity,
@@ -24,7 +24,7 @@ export class DbEnity<T extends Document>
       throw Exceptions.BAD_REQUEST;
     }
     if ((entity as Object).hasOwnProperty("name")) {
-      const res = await this._model.findOne({ name: (entity as any).name });
+      const res = await this._model.find({ name: (entity as any).name });
       if (res) throw Exceptions.ENTITY_EXISTS;
     }
     return this._model
@@ -66,8 +66,6 @@ export class DbEnity<T extends Document>
       });
   }
 
-  
-
   find(filter: { [key: string]: any }) {
     switch(this._model.modelName) {
       case TrainingEntity._model.modelName:
@@ -77,7 +75,7 @@ export class DbEnity<T extends Document>
           path: "exercises",
           populate: {path: "muscles"}
         })
-        .populate("tags")
+        .populate("musclesGroups")
         .then((result) => {
           if(Array.isArray(result)) {
             return result as T[]
@@ -95,7 +93,21 @@ export class DbEnity<T extends Document>
           path: "exercises",
           populate: {path: "muscles"}
         })
-        .populate("tags")
+        // .populate("tags")
+        .then((result) => {
+          if(Array.isArray(result)) {
+            return result as T[]
+          } else {
+            return result as T
+          }
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+      case MuscleGroupEntity._model.modelName:
+        return this._model
+        .find(filter)
+        .populate("muscles")
         .then((result) => {
           if(Array.isArray(result)) {
             return result as T[]
@@ -109,21 +121,12 @@ export class DbEnity<T extends Document>
       case ExerciseEntity._model.modelName:
         return this._model
         .find(filter)
-        .populate("tag")
-        .populate("muscles")
-        .then((result) => {
-          if(Array.isArray(result)) {
-            return result as T[]
-          } else {
-            return result as T
-          }
+        .populate({
+          path: "muscleGroup",
+          populate: {path: "muscles"}
         })
-        .catch((error: Error) => {
-          throw error;
-        });
-      case TagEntity._model.modelName:
-        return this._model
-        .find(filter)
+        .populate("muscles.primary")
+        .populate("muscles.secondary")
         .then((result) => {
           if(Array.isArray(result)) {
             return result as T[]
@@ -146,7 +149,7 @@ export class DbEnity<T extends Document>
             populate: {path: "muscles"}
             },
             {
-              path: "tags"
+              path: "muscleGroups"
             }
           ]
         },

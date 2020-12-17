@@ -4,7 +4,7 @@ import { Router } from "express";
 export const userRouter = Router();
 const userController = new UserController();
 
-userRouter.get("/:username/trainings/:day", userController.getUserTrainingsByTags);
+userRouter.get("/:username/trainings/:day", userController.getUserTrainingsByMuscleGroup);
 
 
 

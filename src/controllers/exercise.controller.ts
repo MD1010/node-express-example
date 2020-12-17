@@ -26,11 +26,11 @@ export class ExerciseController extends GenericCrudController<Exercise> {
     return res.json({ created: newEntity._id });
   });
 
-  getExercisesByTag = errorHandler(async (req: Request, res: Response) => {
-    return res.json(await ExerciseDAL.getExercisesByTag(req.params.name));
+  getExercisesByMuscleGroup = errorHandler(async (req: Request, res: Response) => {
+    return res.json(await ExerciseDAL.getExercisesByMuscleGroup(req.params.name));
   });
 
-  groupByTags = errorHandler(async (req: Request, res: Response) => {
-    return res.json(await ExerciseDAL.ExericesGroupByTags());
+  groupByMuscleGroup = errorHandler(async (req: Request, res: Response) => {
+    return res.json(await ExerciseDAL.groupByMuscleGroup());
   });
 }

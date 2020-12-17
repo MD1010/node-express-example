@@ -6,6 +6,7 @@ import {
   MuscleEntity,
   MuscleGroupEntity,
 } from "../../entities";
+import {IMuscle} from "gymstagram-common"
 
 let MAIN_SCRAP_URL = "https://www.freetrainers.com";
 export const scrapData = async () => {
@@ -160,7 +161,7 @@ async function generateExercise(
   let finalExercise;
   await Promise.all(
     exerciseObject.muscles.primary.map(async (primaryMuscle: any) => {
-      const res = await MuscleEntity.findOne({ name: primaryMuscle });
+      const res = await MuscleEntity.find({ name: primaryMuscle }) as IMuscle;
       if (res) {
         primaryIds.push(res._id);
       }
@@ -168,7 +169,7 @@ async function generateExercise(
   );
   await Promise.all(
     exerciseObject.muscles.secondary.map(async (secondaryMuscle: any) => {
-      const res = await MuscleEntity.findOne({ name: secondaryMuscle });
+      const res = await MuscleEntity.find({ name: secondaryMuscle }) as IMuscle;
       if (res) {
         secondaryIds.push(res._id);
       }
