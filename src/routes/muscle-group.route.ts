@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { MuscleGroupController } from "./../controllers";
+import { MuscleGroupController } from "../controllers";
 
 export const muscleGroupRouter = Router();
 const muscleGroupController = new MuscleGroupController();

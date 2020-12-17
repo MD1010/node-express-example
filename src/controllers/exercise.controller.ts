@@ -33,9 +33,4 @@ export class ExerciseController extends GenericCrudController<Exercise> {
   groupByTags = errorHandler(async (req: Request, res: Response) => {
     return res.json(await ExerciseDAL.ExericesGroupByTags());
   });
-
-  scrapExercise = errorHandler(async (req: Request, res: Response) => {
-    scrapData();
-    res.json(200);
-  });
 }
