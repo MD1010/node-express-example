@@ -42,11 +42,10 @@ export class TrainingController extends GenericCrudController<Training> {
   //   let tags = req.body.tags;
   //   let results: Results = await youtube.search(serachExpression);
 
-  //   results.videos.map(async (video: Video) => {
-  //     const training = generateTraining(video.title, video.link, tags);
-
-  //     let response = await this.dbEntity.create(training as any);
-  //   });
+    results.videos.map(async (video: Video) => {
+      // const training = generateTraining(video.title, video.link, tags);
+      // let response = await this.dbEntity.create(training as any);
+    });
 
   //   res.json(200);
   // });

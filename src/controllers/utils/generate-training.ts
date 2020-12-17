@@ -1,29 +1,19 @@
-import { ITraining, ExerciseDifficulty, ITag } from "gymstagram-common";
-import mongoose from "mongoose";
-import { difficultiesLenght, getRandomInt, urlParse } from "./scrap-helpers";
+import { ITag, Difficulty } from "gymstagram-common";
+import { difficultiesLenght, getRandomInt } from "./scrap-helpers";
 
-export const generateTraining = (
-  name: string,
-  video: string,
-  tags: ITag[]
-): ITraining => {
-  //parsing youtube url for client component
-  const parsedVideo = urlParse(video);
-  const randomIndexOfDifficultLevel = getRandomInt(difficultiesLenght);
-  const difficultLevel = ExerciseDifficulty[randomIndexOfDifficultLevel];
+export const generateTraining = (name: string, video: string, tags: ITag[]) => {
+  const randomIndexOfDifficultLevel = getRandomInt(0, difficultiesLenght);
+  const difficultyLevel = Difficulty[randomIndexOfDifficultLevel];
   const createdAt = new Date();
 
   return {
     tags,
     exercises: [],
-    video: parsedVideo,
+    video,
     name,
     createdAt: createdAt,
     numOfLikes: 0,
     likedBy: [],
-    difficultLevel: difficultLevel,
+    difficultyLevel,
   };
 };
-
-// https://www.youtube.com/watch?v=UBMk30rjy0o&feature=youtu.be
-//  youtu.be => www.youtube.com/embed

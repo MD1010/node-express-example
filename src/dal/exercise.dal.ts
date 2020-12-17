@@ -1,5 +1,5 @@
-import { ExerciseEntity, TagEntity } from "../entities";
-import { Exercise, Tag, Training } from "../models";
+import { ExerciseEntity, MuscleGroupEntity } from "../entities";
+import { Exercise, MuscleGroup, Training } from "../models";
 import { toObjectId } from "../utils/base-id";
 import {ITag} from "gymstagram-common"
 
@@ -58,10 +58,21 @@ export namespace ExerciseDAL {
         {
           $group: {
             _id: "$tag",
-            tag: {$first: "$tag"},
+            tag: { $first: "$tag" },
             excerices: {
-              $push: { id: "$_id", name: "$name", description: "$description", url:"$url", muscles: "$muscles", difficulty: "$difficulty",
-                      notes: "$notes", sets:"$sets", reps:"$reps", restTime: "$restTime", tag: "$tag"},
+              $push: {
+                id: "$_id",
+                name: "$name",
+                description: "$description",
+                url: "$url",
+                muscles: "$muscles",
+                difficulty: "$difficulty",
+                notes: "$notes",
+                sets: "$sets",
+                reps: "$reps",
+                restTime: "$restTime",
+                tag: "$tag",
+              },
             },
           },
         },
@@ -69,9 +80,9 @@ export namespace ExerciseDAL {
           $project: {
             _id: 0,
             tag: 1,
-            excerices: 1
-          }
-        }
+            excerices: 1,
+          },
+        },
       ])
       .then((result) => {
         return result;

@@ -8,7 +8,7 @@ import { Exercise } from "../models";
 import { Exceptions } from "../utils";
 import { errorHandler } from "../utils/errorHandler";
 import { socketServer } from "../utils/socketManager";
-import { generateExercise } from "./utils/generate-exercise";
+import { scrapData } from "./utils/generate-exercise";
 import { GenericCrudController } from "./utils/generic-crud.controller";
 
 export class ExerciseController extends GenericCrudController<Exercise> {
@@ -33,28 +33,4 @@ export class ExerciseController extends GenericCrudController<Exercise> {
   groupByTags = errorHandler(async (req: Request, res: Response) => {
     return res.json(await ExerciseDAL.ExericesGroupByTags());
   });
-
-  // scrapExercise = errorHandler(async (req: Request, res: Response) => {
-  //   let doc: any;
-
-  //   Axios.get(
-  //     "https://www.liftlearngrow.com/blog-page/100-best-exercises-list"
-  //   ).then((res) => {
-  //     const dom = new JSDOM(res.data);
-
-  //     let exerciseNames: string[] = [];
-  //     let exerciseVideos: string[] = [];
-  //     dom.window.document
-  //       .querySelectorAll("#block-72839eccdc60de5038fa > div > ul > li > p > a")
-  //       .forEach((item: any) => exerciseNames.push(item.textContent));
-
-  //     dom.window.document
-  //       .querySelectorAll("#block-72839eccdc60de5038fa > div > ul > li > p > a")
-  //       .forEach((item: any) => exerciseVideos.push(item.href));
-
-  //     generateExercise(exerciseNames, exerciseVideos);
-  //   });
-
-  //   res.json(200);
-  // });
 }
