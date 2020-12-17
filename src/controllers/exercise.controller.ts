@@ -8,7 +8,7 @@ import { Exercise } from "../models";
 import { Exceptions } from "../utils";
 import { errorHandler } from "../utils/errorHandler";
 import { socketServer } from "../utils/socketManager";
-import { scrapData } from "./utils/generate-exercise";
+import { scrapData } from "./utils/scrape";
 import { GenericCrudController } from "./utils/generic-crud.controller";
 
 export class ExerciseController extends GenericCrudController<Exercise> {

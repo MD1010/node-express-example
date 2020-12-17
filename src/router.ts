@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
-import { scrapData } from "./controllers/utils/generate-exercise";
+import { scrapData } from "./controllers/utils/scrape";
+
 import {
   ExerciseEntity,
   MuscleEntity,
