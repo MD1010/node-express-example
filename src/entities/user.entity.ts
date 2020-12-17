@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
-import { DbEnity } from "../dal";
-import { User } from "../models";
+import { DbEnity } from "../dal/genric-entity.dal";
+import { User } from "../models/user.model";
 
 const UserSchema: Schema = new Schema({
   username: { type: String, required: true },

@@ -1,7 +1,11 @@
+import { UserController } from "./../controllers";
 import { Router } from "express";
-import { UserController } from "../controllers";
 
 export const userRouter = Router();
 const userController = new UserController();
+
+userRouter.get("/:username/trainings/:day", userController.getUserTrainingsByMuscleGroup);
+
+
 
 userRouter.post("/login", userController.login);

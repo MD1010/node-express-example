@@ -1,6 +1,11 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import { IReadEntity, IWriteEntity } from "../interfaces";
-import { Exceptions, toObjectId } from "../utils";
+import {TrainingEntity,PostEntity,MuscleEntity,ExerciseEntity,UserEntity, MuscleGroupEntity} from "../entities"
+import {
+  IReadEntity,
+  IWriteEntity,
+} from "../interfaces/generic-crud.interface";
+import { toObjectId } from "./../utils/base-id";
+import {Exceptions} from "../utils"
 
 export class DbEnity<T extends Document>
   implements IReadEntity<T>, IWriteEntity<T> {
@@ -19,7 +24,7 @@ export class DbEnity<T extends Document>
       throw Exceptions.BAD_REQUEST;
     }
     if ((entity as Object).hasOwnProperty("name")) {
-      const res = await this._model.findOne({ name: (entity as any).name });
+      const res = await this._model.find({ name: (entity as any).name });
       if (res) throw Exceptions.ENTITY_EXISTS;
     }
     return this._model
@@ -61,25 +66,107 @@ export class DbEnity<T extends Document>
       });
   }
 
-  findOne(filter: { [key: string]: any }) {
-    return this._model
-      .findOne(filter)
-      .then((result) => {
-        return result as T;
-      })
-      .catch((error: Error) => {
-        throw error;
-      });
-  }
-
-  findAll() {
-    return this._model
-      .find()
-      .then((result) => {
-        return (result as T[]) || [];
-      })
-      .catch((error: Error) => {
-        throw error;
-      });
+  find(filter: { [key: string]: any }) {
+    switch(this._model.modelName) {
+      case TrainingEntity._model.modelName:
+        return this._model
+        .find(filter)
+        .populate({
+          path: "exercises",
+          populate: {path: "muscles"}
+        })
+        .populate("musclesGroups")
+        .then((result) => {
+          if(Array.isArray(result)) {
+            return result as T[]
+          } else {
+            return result as T
+          }
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+      case UserEntity._model.modelName:
+        return this._model
+        .find(filter)
+        .populate({
+          path: "exercises",
+          populate: {path: "muscles"}
+        })
+        // .populate("tags")
+        .then((result) => {
+          if(Array.isArray(result)) {
+            return result as T[]
+          } else {
+            return result as T
+          }
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+      case MuscleGroupEntity._model.modelName:
+        return this._model
+        .find(filter)
+        .populate("muscles")
+        .then((result) => {
+          if(Array.isArray(result)) {
+            return result as T[]
+          } else {
+            return result as T
+          }
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+      case ExerciseEntity._model.modelName:
+        return this._model
+        .find(filter)
+        .populate({
+          path: "muscleGroup",
+          populate: {path: "muscles"}
+        })
+        .populate("muscles.primary")
+        .populate("muscles.secondary")
+        .then((result) => {
+          if(Array.isArray(result)) {
+            return result as T[]
+          } else {
+            return result as T
+          }
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+      case PostEntity._model.modelName:
+        return this._model
+        .find(filter)
+        .populate(
+          {
+          path: "trainingID",
+          populate: [
+            {
+            path: "exercises",
+            populate: {path: "muscles"}
+            },
+            {
+              path: "muscleGroups"
+            }
+          ]
+        },
+        
+        )
+        .then((result) => {
+          if(Array.isArray(result)) {
+            return result as T[]
+          } else {
+            return result as T
+          }
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
+     default:
+      throw Exceptions.ENTITY_DOES_NOT_EXISTS;
+    }
   }
 }

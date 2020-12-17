@@ -1,85 +1,131 @@
 import { ExerciseEntity, MuscleGroupEntity } from "../entities";
 import { Exercise, MuscleGroup, Training } from "../models";
 import { toObjectId } from "../utils/base-id";
+import {IMuscleGroup} from "gymstagram-common"
 
 export namespace ExerciseDAL {
-  export const getExercisesByTag = async (tagName: string) => {
-    const tag = await MuscleGroupEntity.findOne({ name: tagName });
+  export const getExercisesByMuscleGroup = async (muscleGroupName: string) => {
+    console.log(`reached!!! ${muscleGroupName}`)
+    const muscleGroup = await MuscleGroupEntity.find({ name: muscleGroupName }) as IMuscleGroup[];
     return ExerciseEntity.getModel()
       .aggregate([
         {
-          $match: { tag: toObjectId(tag._id) },
+          $match: { muscleGroup: toObjectId(muscleGroup[0]._id!) },
         },
         {
           $lookup: {
             from: "muscles",
-            localField: "muscles",
+            localField: "muscles.primary",
             foreignField: "_id",
-            as: "muscles",
-          },
+            as: "muscles.primary"
+          }  
         },
         {
           $lookup: {
-            from: "tags",
-            localField: "tag",
+            from: "muscles",
+            localField: "muscles.secondary",
             foreignField: "_id",
-            as: "tag",
-          },
+            as: "muscles.secondary"
+          }  
         },
+        {
+          $lookup: {
+            from: "muscleGroups",
+            localField: "muscleGroup",
+            foreignField: "_id",
+            as: "muscleGroup"
+          }  
+        },
+        {
+          $unwind: {
+            path: "$muscleGroup",
+          preserveNullAndEmptyArrays: true
+          }
+        }, 
+        {
+          $lookup: {
+            from: "muscles",
+            localField: "muscleGroup.muscles",
+            foreignField: "_id",
+            as: "muscleGroup.muscles"
+          }
+        }
       ])
       .then((result) => {
-        return result as Exercise[];
+        return result;
       })
       .catch((error: Error) => {
         throw error;
       });
   };
 
-  export const ExericesGroupByTags = () => {
+  export const groupByMuscleGroup = () => {
+    console.log("reached2232323232")
     return ExerciseEntity.getModel()
       .aggregate([
         {
           $lookup: {
             from: "muscles",
-            localField: "muscles",
+            localField: "muscles.primary",
             foreignField: "_id",
-            as: "muscles",
-          },
+            as: "muscles.primary"
+          }  
         },
         {
           $lookup: {
-            from: "tags",
-            localField: "tag",
+            from: "muscles",
+            localField: "muscles.secondary",
             foreignField: "_id",
-            as: "tag",
-          },
+            as: "muscles.secondary"
+          }  
+        },
+        {
+          $lookup: {
+            from: "muscleGroups",
+            localField: "muscleGroup",
+            foreignField: "_id",
+            as: "muscleGroup"
+          }  
+        },
+        {
+          $unwind: {
+            path: "$muscleGroup",
+          preserveNullAndEmptyArrays: true
+          }
+        }, 
+        {
+          $lookup: {
+            from: "muscles",
+            localField: "muscleGroup.muscles",
+            foreignField: "_id",
+            as: "muscleGroup.muscles"
+          }
         },
         {
           $group: {
-            _id: "$tag",
-            tag: { $first: "$tag" },
-            excerices: {
-              $push: {
-                id: "$_id",
-                name: "$name",
-                description: "$description",
-                url: "$url",
-                muscles: "$muscles",
-                difficulty: "$difficulty",
-                notes: "$notes",
-                sets: "$sets",
-                reps: "$reps",
-                restTime: "$restTime",
-                tag: "$tag",
-              },
+            "_id": "$muscleGroup",
+            group: {$first: "$muscleGroup.name"},
+            ExerciseName: {$first: "$name"},
+            video: {$first: "$video"},
+            muscles: {$first: "$muscles"},
+            muscleGroup: {$first: "$muscleGroup"},
+            instructions: {$first: "$instructions"},
+            image: {$first: "$image"}
+            // excerices: {
+            //   $push: {
+            //     id: "$_id",
+            //     name: "$name",
+            //     video: "$video",
+            //     muscles: "$muscles",
+            //     muscleGroup: "$muscleGroup",
+            //     image
+            //   },
             },
           },
-        },
         {
           $project: {
-            _id: 0,
-            tag: 1,
-            excerices: 1,
+            "_id": 0,
+            
           },
         },
       ])

@@ -1,6 +1,5 @@
 export interface IReadEntity<T> {
-  findOne: (prop: any) => Promise<T | null>;
-  findAll: () => Promise<T[]>;
+  find: (prop: any) => Promise<T | T[]> | any;
 }
 
 export interface IWriteEntity<T> {
