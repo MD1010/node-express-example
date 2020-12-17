@@ -43,7 +43,7 @@ export class TrainingController extends GenericCrudController<Training> {
     let results: Results = await youtube.search(serachExpression);
 
     results.videos.map(async (video: Video) => {
-      const training = generateTraining(video.title, video.link, tags);
+      // const training = generateTraining(video.title, video.link, tags);
       // let response = await this.dbEntity.create(training as any);
     });
 

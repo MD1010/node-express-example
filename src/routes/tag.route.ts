@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { TagController } from "./../controllers";
+import { MuscleGroupController } from "./../controllers";
 
-export const tagRouter = Router();
-const tagController = new TagController();
+export const muscleGroupRouter = Router();
+const muscleGroupController = new MuscleGroupController();
 
-tagRouter.get("/", tagController.getAllTags);
-tagRouter.post("/", tagController.createTag);
-tagRouter.put("/:id", tagController.updateTag);
-tagRouter.get("/:id", tagController.getTag);
-tagRouter.delete("/:id", tagController.deleteTag);
+muscleGroupRouter.get("/", muscleGroupController.getAllMuscleGroups);
+muscleGroupRouter.post("/", muscleGroupController.createMuscleGroup);
+muscleGroupRouter.put("/:id", muscleGroupController.updateMuscleGroup);
+muscleGroupRouter.get("/:id", muscleGroupController.getMuscleGroup);
+muscleGroupRouter.delete("/:id", muscleGroupController.deleteMuscleGroup);

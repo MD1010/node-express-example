@@ -1,72 +1,148 @@
-import { exerciseRouter } from "../../routes";
-import { Difficulty, IExercise } from "gymstagram-common";
-import { toObjectId } from "../../utils";
-import { ObjectId } from "mongodb";
+import axios from "axios";
+import { JSDOM } from "jsdom";
+import youtube from "scrape-youtube";
 import {
-  difficultiesLenght as difficultiesLength,
-  getRandomInt,
-} from "./scrap-helpers";
+  ExerciseEntity,
+  MuscleEntity,
+  MuscleGroupEntity,
+} from "../../entities";
 
-export const generateExercise = (names: string[], videos: string[]) => {
-  let releventNames: string[] = names.slice(2);
-  let releventVideos: string[] = videos.slice(2);
-  type dbExercise =
-    | Pick<IExercise, Exclude<keyof IExercise, "tag">>
-    | { tag: ObjectId };
+let MAIN_SCRAP_URL = "https://www.freetrainers.com";
+export const scrapData = async () => {
+  //getting the musclesGroupPage ( main page, our entry point to the scraping)
+  let allMusclesGroupPage = await axios.get(
+    `${MAIN_SCRAP_URL}/exercise/muscle/`
+  );
+  const dom = new JSDOM(allMusclesGroupPage.data);
 
-  let exercise: dbExercise;
-  let exercises: dbExercise[] = [];
+  let musclesGroups = dom.window.document.querySelectorAll(
+    "body > div > div > div > div > ul > li > a"
+  );
+  //for each muscle group we entering one layer inside
+  Array.from(musclesGroups)
+    .slice(0, musclesGroups.length - 1)
+    .map(async (muscleGroup) => {
+      let muscleGroupUrl = `${MAIN_SCRAP_URL}${muscleGroup.getAttribute(
+        "href"
+      )}`;
+      let createdMusclesIds = await generateMuscles(muscleGroupUrl);
+      const createdMuscleGroupId = await generateMusclesGroup(
+        createdMusclesIds,
+        dom
+      );
+      let exercises = dom.window.document.querySelectorAll(".panel>h5>a");
+      Array.from(exercises).map(async (exercise) => {
+        let exerciseUrl = `${MAIN_SCRAP_URL}${exercise.getAttribute("href")}`;
+        let exerciseObject = await scrapExercise(exerciseUrl);
+        await generateExercise(exerciseObject, createdMuscleGroupId);
+      });
+    });
+};
 
-  let tag: ObjectId = new ObjectId();
+export const generateMuscles = async (muscleGroupUrl: string) => {
+  const createdMusclesIds: any[] = [];
+  let specificMusclesGroupPage = await axios.get(muscleGroupUrl);
+  const dom = new JSDOM(specificMusclesGroupPage.data);
+  let muscles = dom.window.document.querySelectorAll(
+    "body > div > div > div > div.columns.large-8 > ul > li> a"
+  );
+  Array.from(muscles).map(async (muscle) => {
+    let muscleUrl = `${MAIN_SCRAP_URL}${muscle.getAttribute("href")}`;
+    createdMusclesIds.push(await generateMuscle(muscleUrl));
+  });
+  return createdMusclesIds;
+};
+export const generateMuscle = async (muscleUrl: string) => {
+  let specificMusclesPage = await axios.get(muscleUrl);
+  const dom = new JSDOM(specificMusclesPage.data);
+  const muscleObject = scrapeMusclesEntitiesDetails(dom);
+  let createdMuscle = await MuscleEntity.create(muscleObject as any);
+  return createdMuscle._id;
+};
 
-  let tagsMap = {
-    16: "5fc82b4469562b1584bed618",
-    37: "5fcbe6846674f842d41c6bf1",
-    61: "5fc82b4969562b1584bed619",
-    73: "5fce9896ce03938cf6e3560d",
-    90: "5fce9880ce03938cf6e3560c",
-    100: "5fd9edb551ba7f0e4095d9fd",
+async function generateMusclesGroup(createdMusclesIds: any[], dom: JSDOM) {
+  const muscleGroupObject = scrapeMusclesEntitiesDetails(dom);
+  const finalMuscleGroupObjectToDb = {
+    ...muscleGroupObject,
+    muscles: createdMusclesIds,
   };
-  let setsOptions = [2, 3, 4];
-  let repsOptions = [6, 8, 10, 12, 15];
-  let restTimeOptions = [30, 45, 60, 75, 90];
-  let namesLenght = releventNames.length;
-  let setOptionsLenght = setsOptions.length;
-  let repsOptionsLenght = repsOptions.length;
-  let restTimeOptionsLenght = restTimeOptions.length;
+  let createdMuscleGroup = await MuscleGroupEntity.create(
+    finalMuscleGroupObjectToDb as any
+  );
+  return createdMuscleGroup._id;
+}
 
-  for (let index = 0; index < namesLenght; index++) {
-    switch (true) {
-      case index >= 0 && index <= 16:
-        tag = toObjectId(tagsMap[16]);
-        break;
-      case index >= 17 && index <= 37:
-        tag = toObjectId(tagsMap[37]);
-        break;
-      case index >= 36 && index <= 61:
-        tag = toObjectId(tagsMap[61]);
-        break;
-      case index >= 60 && index <= 73:
-        tag = toObjectId(tagsMap[73]);
-        break;
-      case index >= 72 && index <= 90:
-        tag = toObjectId(tagsMap[90]);
-        break;
-      case index >= 91 && index <= 100:
-        tag = toObjectId(tagsMap[100]);
-        break;
-    }
-    exercise = {
-      name: releventNames[index],
-      video: releventVideos[index],
-      difficulty: getRandomInt(0, difficultiesLength),
-      sets: setsOptions[getRandomInt(0, setOptionsLenght)],
-      reps: repsOptions[getRandomInt(0, repsOptionsLenght)],
-      restTime: restTimeOptions[getRandomInt(0, restTimeOptionsLenght)],
-      tag,
-    };
-    exercises.push(exercise);
+async function scrapeMusclesEntitiesDetails(dom: JSDOM) {
+  let name = dom.window.document.querySelector(".columns>h1")?.textContent;
+  let description = dom.window.document.querySelector(".columns > p")
+    ?.textContent;
+  let image = `${MAIN_SCRAP_URL}${dom.window.document
+    .querySelector("#body_map-15~img")
+    ?.getAttribute("src")}`;
+
+  return { name, description, image };
+}
+
+async function scrapExercise(exerciseUrl: string) {
+  let specificExercisePage = await axios.get(exerciseUrl);
+  const dom = new JSDOM(specificExercisePage.data);
+  let name = dom.window.document.querySelector(".columns>h1")?.textContent!;
+  let image = dom.window.document
+    .querySelector(".show-for-medium-up>li>img")
+    ?.getAttribute("src");
+  let video = await (await youtube.search(name)).videos[0].link;
+
+  let instructions: any[] = [];
+  let primaryMuscles: any[] = [];
+  let secondaryMuscles: any[] = [];
+  let instructionsUlElement = dom.window.document.querySelector(
+    ".show-for-small-down~ul"
+  )?.children!;
+  Array.from(instructionsUlElement).map((instruction) => {
+    instructions.push(instruction.textContent);
+  });
+  let primaryMusclesSection = dom.window.document.querySelectorAll(
+    "tbody>tr>td"
+  )[0].children;
+  let secondaryMusclesSection = dom.window.document.querySelectorAll(
+    "tbody>tr>td"
+  )[1].children;
+  Array.from(primaryMusclesSection).map((muscle) => {
+    primaryMuscles.push(muscle.outerHTML);
+  });
+  Array.from(secondaryMusclesSection).map((muscle) => {
+    secondaryMuscles.push(muscle.outerHTML);
+  });
+
+  return {
+    name,
+    image,
+    video,
+    instructions,
+    muscles: { primary: primaryMuscles, secondary: secondaryMuscles },
+  };
+}
+async function generateExercise(
+  exerciseObject: any,
+  createdMuscleGroupId: string
+) {
+  let primaryIds = [];
+  let secondaryIds = [];
+  let finalExercise;
+  for (let primaryMuscle of exerciseObject.muscles.primary) {
+    const res = await MuscleEntity.findOne({ name: primaryMuscle });
+    primaryIds.push(res._id);
+  }
+  for (let secondaryMuscle of exerciseObject.muscles.secondary) {
+    const res = await MuscleEntity.findOne({ name: secondaryMuscle });
+    secondaryIds.push(res._id);
   }
 
-  console.log(exercises.length);
-};
+  finalExercise = {
+    ...exerciseObject,
+    muscles: { primary: primaryIds, secondary: secondaryIds },
+    muscleGroup: createdMuscleGroupId,
+  };
+
+  await ExerciseEntity.create(finalExercise as any);
+}
