@@ -73,10 +73,10 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
           })
           .populate("musclesGroups")
           .then((result) => {
-            if (Array.isArray(result)) {
+            if (result.length > 1) {
               return result as T[];
             } else {
-              return result as T;
+              return (result[0] as T) || {};
             }
           })
           .catch((error: Error) => {
@@ -92,10 +92,10 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
             })
             // .populate("tags")
             .then((result) => {
-              if (Array.isArray(result)) {
+              if (result.length > 1) {
                 return result as T[];
               } else {
-                return result as T;
+                return (result[0] as T) || {};
               }
             })
             .catch((error: Error) => {
@@ -107,10 +107,10 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
           .find(filter)
           .populate("muscles")
           .then((result) => {
-            if (Array.isArray(result)) {
+            if (result.length > 1) {
               return result as T[];
             } else {
-              return result as T;
+              return (result[0] as T) || {};
             }
           })
           .catch((error: Error) => {
@@ -126,10 +126,10 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
           .populate("muscles.primary")
           .populate("muscles.secondary")
           .then((result) => {
-            if (Array.isArray(result)) {
+            if (result.length > 1) {
               return result as T[];
             } else {
-              return result as T;
+              return (result[0] as T) || {};
             }
           })
           .catch((error: Error) => {
@@ -151,19 +151,28 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
             ],
           })
           .then((result) => {
-            if (Array.isArray(result)) {
+            if (result.length > 1) {
               return result as T[];
             } else {
-              return result as T;
+              return (result[0] as T) || {};
             }
           })
           .catch((error: Error) => {
             throw error;
           });
       case MuscleEntity._model.modelName:
-        return this._model.find(filter).catch((error: Error) => {
-          throw error;
-        });
+        return this._model
+          .find(filter)
+          .then((result) => {
+            if (result.length > 1) {
+              return result as T[];
+            } else {
+              return (result[0] as T) || {};
+            }
+          })
+          .catch((error: Error) => {
+            throw error;
+          });
 
       default:
         throw Exceptions.ENTITY_DOES_NOT_EXISTS;
