@@ -19,5 +19,4 @@ const ExerciseSchema: Schema = new Schema({
   instructions: [{ type: String, required: true }],
 });
 
-
 export const ExerciseEntity = new DbEnity<Exercise>("Exercise", ExerciseSchema);

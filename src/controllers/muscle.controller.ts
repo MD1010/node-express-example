@@ -3,9 +3,8 @@ import { GenericCrudController } from "./utils/generic-crud.controller";
 import { MuscleEntity } from "../entities";
 
 export class MuscleController extends GenericCrudController<Muscle> {
-
   constructor() {
-    super(MuscleEntity)
+    super(MuscleEntity);
   }
 
   getAllMuscles = this.getAllEntites;
