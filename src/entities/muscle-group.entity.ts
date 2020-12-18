@@ -12,7 +12,4 @@ const MuscleGroupSchema: Schema = new Schema(
   { collection: "muscleGroups" }
 );
 
-export const MuscleGroupEntity = new DbEnity<MuscleGroup>(
-  "MuscleGroup",
-  MuscleGroupSchema
-);
+export const MuscleGroupEntity = new DbEnity<MuscleGroup>("MuscleGroup", MuscleGroupSchema);
