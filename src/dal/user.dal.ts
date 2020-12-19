@@ -1,6 +1,33 @@
 import {UserEntity } from "../entities";
+import { toObjectId } from "../utils/base-id";
 
 export namespace UserDAL {
+
+  export const AddExcericeToDayTraining = async (username: string, exerciseID: string, personalPreferences: any) => {
+    return UserEntity.getModel()
+    .update(
+      {
+        "username": username,
+      },
+      {
+        $push: {
+          "trainings.$[elem].exercises": {
+            exercise: toObjectId(exerciseID),
+            reps: parseInt(personalPreferences.reps),
+            sets: parseInt(personalPreferences.sets),
+            restTime: parseInt(personalPreferences.restTime) 
+          }
+        }
+      },
+      {
+        upsert: true,
+        arrayFilters: [
+          { "elem.day": parseInt(personalPreferences.day)},
+        ]
+      }
+    )
+  }
+
   export const TrainingsByMuslceGroup = async (username: string, day: string) => {
     return UserEntity.getModel()
       .aggregate([

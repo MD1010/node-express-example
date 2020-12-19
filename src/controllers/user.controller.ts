@@ -35,5 +35,9 @@ export class UserController extends GenericCrudController<User> {
   getUserTrainingsByMuscleGroup = errorHandler(async (req: Request, res: Response) => {
     return res.json(await UserDAL.TrainingsByMuslceGroup(req.params.username, req.params.day));
   });
+
+  AddExcericeToDayTraining = errorHandler(async (req: Request, res: Response) => {
+    return res.json(await UserDAL.AddExcericeToDayTraining(req.params.username, req.body.exerciseID, req.body.personalPreferences));
+  });
 }
 
