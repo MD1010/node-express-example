@@ -176,10 +176,16 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
         find(filter)
         .skip( pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0 )
         .limit(pageNumber !== undefined ? 6 : 0)
+        .then((result) => {
+          if (result.length > 1) {
+            return result as T[];
+          } else {
+            return (result[0] as T) || {};
+          }
+        })
         .catch((error: Error) => {
           throw error;
         });
-
       default:
         throw Exceptions.ENTITY_DOES_NOT_EXISTS;
     }
