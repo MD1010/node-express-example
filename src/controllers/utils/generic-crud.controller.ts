@@ -7,15 +7,16 @@ export abstract class GenericCrudController<T extends Document> {
   constructor(protected dbEntity: DbEnity<T>) {}
 
   protected getAllEntites = errorHandler(async (req: Request, res: Response) => {
-    return res.json(await this.dbEntity.find({}));
+    console.log(req.query.pageNumber)
+    return res.json(await this.dbEntity.find({}, typeof req.query.pageNumber === "string" ? req.query.pageNumber : undefined));
   });
 
   protected getEntityById = errorHandler(async (req: Request, res: Response) => {
-    return res.json(await this.dbEntity.find({ _id: req.params.id }));
+    return res.json(await this.dbEntity.find({ _id: req.params.id }, typeof req.query.pageNumber === "string" ? req.query.pageNumber : undefined));
   });
 
   protected findEntityByFilter = errorHandler(async (req: Request, res: Response) => {
-    return res.json(await this.dbEntity.find(req.body));
+    return res.json(await this.dbEntity.find(req.body, typeof req.query.pageNumber === "string" ? req.query.pageNumber : undefined));
   });
 
   protected createEntity = errorHandler(async (req: Request, res: Response) => {

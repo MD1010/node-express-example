@@ -1,5 +1,5 @@
 export interface IReadEntity<T> {
-  find: (prop: any) => Promise<T | T[]> | any;
+  find: (prop: any, pageNumber: string | undefined) => Promise<T | T[]> | any;
 }
 
 export interface IWriteEntity<T> {

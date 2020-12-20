@@ -62,11 +62,13 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
       });
   }
 
-  find(filter: { [key: string]: any }) {
+  find(filter: { [key: string]: any }, pageNumber?:string | undefined ) {
     switch (this._model.modelName) {
       case TrainingEntity._model.modelName:
         return this._model
           .find(filter)
+          .skip( pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0 )
+          .limit(pageNumber !== undefined ? 6 : 0)
           .populate({
             path: "exercises",
             populate: { path: "muscles" },
@@ -86,6 +88,8 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
         return (
           this._model
             .find(filter)
+            .skip( pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0 )
+            .limit(pageNumber !== undefined ? 6 : 0)
             .populate({
               path: "exercises",
               populate: { path: "muscles" },
@@ -105,6 +109,8 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
       case MuscleGroupEntity._model.modelName:
         return this._model
           .find(filter)
+          .skip( pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0 )
+          .limit(pageNumber !== undefined ? 6 : 0)
           .populate("muscles")
           .then((result) => {
             if (Array.isArray(result)) {
@@ -117,8 +123,11 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
             throw error;
           });
       case ExerciseEntity._model.modelName:
+        console.log(pageNumber)
         return this._model
           .find(filter)
+          .skip( pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0 )
+          .limit(pageNumber !== undefined ? 6 : 0)
           .populate({
             path: "muscleGroup",
             populate: { path: "muscles" },
@@ -138,6 +147,8 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
       case PostEntity._model.modelName:
         return this._model
           .find(filter)
+          .skip( pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0 )
+          .limit(pageNumber !== undefined ? 6 : 0)
           .populate({
             path: "trainingID",
             populate: [
@@ -161,7 +172,11 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
             throw error;
           });
       case MuscleEntity._model.modelName:
-        return this._model.find(filter).catch((error: Error) => {
+        return this._model.
+        find(filter)
+        .skip( pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0 )
+        .limit(pageNumber !== undefined ? 6 : 0)
+        .catch((error: Error) => {
           throw error;
         });
 
