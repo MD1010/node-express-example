@@ -1,7 +1,34 @@
-import { UserEntity } from "../entities";
+import {UserEntity } from "../entities";
+import { toObjectId } from "../utils/base-id";
 
 export namespace UserDAL {
-  export const TrainingsByTags = async (username: string, day: string) => {
+
+  export const AddExcericeToDayTraining = async (username: string, exerciseID: string, personalPreferences: any) => {
+    return UserEntity.getModel()
+    .update(
+      {
+        "username": username,
+      },
+      {
+        $push: {
+          "trainings.$[elem].exercises": {
+            exercise: toObjectId(exerciseID),
+            reps: parseInt(personalPreferences.reps),
+            sets: parseInt(personalPreferences.sets),
+            restTime: parseInt(personalPreferences.restTime) 
+          }
+        }
+      },
+      {
+        upsert: true,
+        arrayFilters: [
+          { "elem.day": parseInt(personalPreferences.day)},
+        ]
+      }
+    )
+  }
+
+  export const TrainingsByMuslceGroup = async (username: string, day: string) => {
     return UserEntity.getModel()
       .aggregate([
         {
@@ -17,14 +44,6 @@ export namespace UserDAL {
             $match: { "trainings.day": parseInt(day) },
           },
         {
-          $lookup: {
-            from: "exercises",
-            localField: "trainings.exercises",
-            foreignField: "_id",
-            as: "trainings.exercises",
-          },
-        },
-        {
             $unwind: {
                 path: "$trainings.exercises",
                 preserveNullAndEmptyArrays: true
@@ -32,31 +51,67 @@ export namespace UserDAL {
         },
         {
           $lookup: {
-            from: "muscles",
-            localField: "trainings.exercises.muscles",
+            from: "exercises",
+            localField: "trainings.exercises.exercise",
             foreignField: "_id",
-            as: "trainings.exercises.muscles",
+            as: "trainings.exercises.exercise",
+          },
+        },
+        {
+          $unwind: {
+              path: "$trainings.exercises.exercise",
+              preserveNullAndEmptyArrays: true
+          }
+      },
+        {
+          $lookup: {
+            from: "muscles",
+            localField: "trainings.exercises.exercise.muscles.primary",
+            foreignField: "_id",
+            as: "trainings.exercises.exercise.muscles.primary",
           },
         },
         {
           $lookup: {
-            from: "musclesGroups",
-            localField: "trainings.exercises.musclesGroup",
+            from: "muscles",
+            localField: "trainings.exercises.exercise.muscles.secondary",
             foreignField: "_id",
-            as: "trainings.exercises.musclesGroup",
+            as: "trainings.exercises.exercise.muscles.secondary",
+          },
+        },
+        {
+          $lookup: {
+            from: "muscleGroups",
+            localField: "trainings.exercises.exercise.muscleGroup",
+            foreignField: "_id",
+            as: "trainings.exercises.exercise.muscleGroup",
+          },
+        },
+        {
+          $unwind: {
+            path: "$trainings.exercises.exercise.muscleGroup",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $lookup: {
+            from: "muscles",
+            localField: "trainings.exercises.exercise.muscleGroup.muscles",
+            foreignField: "_id",
+            as: "trainings.exercises.exercise.muscleGroup.muscles",
           },
         },
         {
             $group: {
-                "_id": "$trainings.exercises.musclesGroup",
-                tag:{$first: "$trainings.exercises.musclesGroup"},
+                "_id": "$trainings.exercises.exercise.muscleGroup",
+                muscleGroup:{$first: "$trainings.exercises.exercise.muscleGroup.name"},
                 exercises: {$push: "$trainings.exercises"}
             }
         },
         {
             $project: {
                 "_id": 0,
-                tag: 1,
+                muscleGroup: 1,
                 exercises: 1
             }
         }

@@ -5,6 +5,7 @@ export const userRouter = Router();
 const userController = new UserController();
 
 userRouter.get("/:username/trainings/:day", userController.getUserTrainingsByMuscleGroup);
+userRouter.post("/:username/trainings", userController.AddExcericeToDayTraining);
 
 
 

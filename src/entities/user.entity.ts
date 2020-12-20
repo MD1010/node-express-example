@@ -8,7 +8,7 @@ const UserSchema: Schema = new Schema({
   isAdmin: { type: Boolean },
   trainings: [
     {
-      day: { type: Schema.Types.String, required: true },
+      day: { type: Schema.Types.Number, required: true },
       exercises: [
         {
           exercise: {
