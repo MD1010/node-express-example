@@ -7,6 +7,7 @@ const PostSchema: Schema = new Schema({
   trainingID: { type: Schema.Types.ObjectId, required: true, ref: "Training" },
   content: { type: String, required: true },
   numOfLikes: { type: Number, required: true },
+  likedBy: [{ type: String, default: [] }],
   createdAt: { type: Schema.Types.Date, required: true },
 });
 

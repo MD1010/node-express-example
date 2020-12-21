@@ -37,4 +37,18 @@ export class TrainingController extends GenericCrudController<Training> {
     let sortedTrainings = orderBy(trainings, [sortBy], ["desc"]);
     res.json(sortedTrainings);
   });
+  likeTraining = errorHandler(async (req: Request, res: Response) => {
+    let likesToAdd = req.body.dataToSend.likes;
+    let userLikedObject = req.body.dataToSend.user;
+    let objectId = req.body.dataToSend.objectName;
+    let objectType = req.body.dataToSend.type;
+
+    let response = await TrainingDAL.updateLikes(
+      objectId,
+      userLikedObject,
+      likesToAdd,
+      objectType
+    );
+    res.json(response);
+  });
 }
