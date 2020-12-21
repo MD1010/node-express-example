@@ -8,8 +8,8 @@ const TrainingSchema: Schema = new Schema({
   exercises: [{ type: Schema.Types.ObjectId, required: true, ref: "Exercise" }],
   video: { type: String, required: true },
   createdAt: { type: Schema.Types.Date, required: true },
-  numOfLikes: { type: Number, required: true },
-  likedBy: [{ type: String, required: true }],
+  numOfLikes: { type: Number, default: 0 },
+  likedBy: [{ type: String, default: [] }],
   difficultyLevel: { type: String, required: true },
 });
 
