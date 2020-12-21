@@ -19,12 +19,12 @@ import { errorHandler } from "./utils/errorHandler";
 
 export const appRouter = Router();
 
-appRouter.use("/api/user", userRouter);
-appRouter.use("/api/exercise", exerciseRouter);
-appRouter.use("/api/training", trainingRouter);
-appRouter.use("/api/tag", muscleGroupRouter);
-appRouter.use("/api/muscle", muscleRouter);
-appRouter.use("/api/post", postRouter);
+appRouter.use("/api/users", userRouter);
+appRouter.use("/api/exercises", exerciseRouter);
+appRouter.use("/api/trainings", trainingRouter);
+appRouter.use("/api/tags", muscleGroupRouter);
+appRouter.use("/api/muscles", muscleRouter);
+appRouter.use("/api/posts", postRouter);
 
 appRouter.get("/check", (req, res) => {
   res.send("ok");

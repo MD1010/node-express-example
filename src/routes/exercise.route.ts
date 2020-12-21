@@ -6,7 +6,7 @@ const exerciseController = new ExerciseController();
 
 exerciseRouter.get("/", exerciseController.getAllExercises);
 exerciseRouter.get("/muscleGroup/:name", exerciseController.getExercisesByMuscleGroup);
-exerciseRouter.get("/musclesGroup", exerciseController.groupByMuscleGroup);
+exerciseRouter.get("/muscleGroups", exerciseController.groupByMuscleGroup);
 exerciseRouter.post("/", exerciseController.createExercise);
 exerciseRouter.put("/:id", exerciseController.updateExercise);
 exerciseRouter.get("/:id", exerciseController.getExercise);
