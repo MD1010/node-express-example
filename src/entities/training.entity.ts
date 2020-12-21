@@ -10,7 +10,7 @@ const TrainingSchema: Schema = new Schema({
   createdAt: { type: Schema.Types.Date, required: true },
   numOfLikes: { type: Number, default: 0 },
   likedBy: [{ type: String, default: [] }],
-  difficultyLevel: { type: String, required: true },
+  difficultyLevel: { type: Number, required: true },
 });
 
 export const TrainingEntity = new DbEnity<Training>("Training", TrainingSchema);
