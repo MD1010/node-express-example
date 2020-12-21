@@ -101,25 +101,21 @@ export namespace ExerciseDAL {
         },
         {
           $group: {
-            _id: "$muscleGroup",
+            _id: "$muscleGroup.name",
             group: { $first: "$muscleGroup.name" },
-            ExerciseName: { $first: "$name" },
-            video: { $first: "$video" },
-            muscles: { $first: "$muscles" },
-            muscleGroup: { $first: "$muscleGroup" },
-            instructions: { $first: "$instructions" },
-            image: { $first: "$image" },
-            // excerices: {
-            //   $push: {
-            //     id: "$_id",
-            //     name: "$name",
-            //     video: "$video",
-            //     muscles: "$muscles",
-            //     muscleGroup: "$muscleGroup",
-            //     image
-            //   },
-          },
+            excerices: {
+              $push: {
+                id: "$_id",
+                name: "$name",
+                video: "$video",
+                muscles: "$muscles",
+                muscleGroup: "$muscleGroup",
+                instructions: "$instructions",
+                image: "$image",
+              },
+          }
         },
+      },
         {
           $project: {
             _id: 0,

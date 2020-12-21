@@ -10,7 +10,7 @@ trainingRouter.get(
   "/sortedTraining/:sortBy",
   trainingController.getSortedTrainings
 );
-trainingRouter.get("/muscleGroup", trainingController.groupByMuscleGroup);
+trainingRouter.get("/muscleGroups", trainingController.groupByMuscleGroup);
 trainingRouter.post("/", trainingController.createTraining);
 trainingRouter.put("/:id", trainingController.updateTraining);
 trainingRouter.get("/:id", trainingController.getTraining);

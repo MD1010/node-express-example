@@ -140,12 +140,12 @@ export const groupByMuscleGroup = () => {
       },
       {
         $group: {
-          "_id":"$musclesGroups._id",
-          group: {$first: "$musclesGroups.name"},
+          "_id":"$musclesGroups" ,
+          group: {$push: "$musclesGroups.name"},
           trainingName: {$first: "$name"},
           trainingMuscleGroups: {$push: "$musclesGroups"},
           exercises: {$push: "$exercises"},
-          likedBy: {$push: "$likedBy"},
+          likedBy: {$first: "$likedBy"},
           video: {$first: "$video"},
           createdAt: {$first: "$createdAt"},
           numOfLikes: {$first: "$numOfLikes"},
