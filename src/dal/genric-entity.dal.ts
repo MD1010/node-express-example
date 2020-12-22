@@ -1,8 +1,8 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import { TrainingEntity, PostEntity, MuscleEntity, ExerciseEntity, UserEntity, MuscleGroupEntity } from "../entities";
+import { ExerciseEntity, MuscleEntity, MuscleGroupEntity, PostEntity, TrainingEntity, UserEntity } from "../entities";
 import { IReadEntity, IWriteEntity } from "../interfaces/generic-crud.interface";
-import { toObjectId } from "./../utils/base-id";
 import { Exceptions } from "../utils";
+import { toObjectId } from "./../utils/base-id";
 
 export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity<T> {
   protected _model: Model<Document>;
@@ -62,24 +62,32 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
       });
   }
 
-  find(filter: { [key: string]: any }, pageNumber?:string | undefined ) {
+  async findOne(filter: { [key: string]: any }) {
+    const [result] = await this.find(filter);
+    return result;
+  }
+
+  find(filter: { [key: string]: any }, pageNumber?: string | undefined) {
     switch (this._model.modelName) {
       case TrainingEntity._model.modelName:
         return this._model
           .find(filter)
-          .skip( pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0 )
+          .skip(pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0)
           .limit(pageNumber !== undefined ? 6 : 0)
           .populate({
             path: "exercises",
+            populate: [
+            { path: "muscles.primary"}, { path: "muscles.secondary" }, 
+            { path: "muscleGroup",
+            populate: { path: "muscles" }
+          }],
+          })
+          .populate({
+            path: "musclesGroups",
             populate: { path: "muscles" },
           })
-          .populate("musclesGroups")
           .then((result) => {
-            if (result.length > 1) {
-              return result as T[];
-            } else {
-              return (result[0] as T) || {};
-            }
+            return result as T[];
           })
           .catch((error: Error) => {
             throw error;
@@ -88,7 +96,7 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
         return (
           this._model
             .find(filter)
-            .skip( pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0 )
+            .skip(pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0)
             .limit(pageNumber !== undefined ? 6 : 0)
             .populate({
               path: "exercises",
@@ -96,11 +104,7 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
             })
             // .populate("tags")
             .then((result) => {
-              if (result.length > 1) {
-                return result as T[];
-              } else {
-                return (result[0] as T) || {};
-              }
+              return result as T[];
             })
             .catch((error: Error) => {
               throw error;
@@ -109,24 +113,20 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
       case MuscleGroupEntity._model.modelName:
         return this._model
           .find(filter)
-          .skip( pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0 )
+          .skip(pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0)
           .limit(pageNumber !== undefined ? 6 : 0)
           .populate("muscles")
           .then((result) => {
-            if (result.length > 1) {
-              return result as T[];
-            } else {
-              return (result[0] as T) || {};
-            }
+            return result as T[];
           })
           .catch((error: Error) => {
             throw error;
           });
       case ExerciseEntity._model.modelName:
-        console.log(pageNumber)
+        console.log(pageNumber);
         return this._model
           .find(filter)
-          .skip( pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0 )
+          .skip(pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0)
           .limit(pageNumber !== undefined ? 6 : 0)
           .populate({
             path: "muscleGroup",
@@ -135,11 +135,7 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
           .populate("muscles.primary")
           .populate("muscles.secondary")
           .then((result) => {
-            if (result.length > 1) {
-              return result as T[];
-            } else {
-              return (result[0] as T) || {};
-            }
+            return result as T[];
           })
           .catch((error: Error) => {
             throw error;
@@ -147,7 +143,7 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
       case PostEntity._model.modelName:
         return this._model
           .find(filter)
-          .skip( pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0 )
+          .skip(pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0)
           .limit(pageNumber !== undefined ? 6 : 0)
           .populate({
             path: "trainingID",
@@ -162,30 +158,22 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
             ],
           })
           .then((result) => {
-            if (result.length > 1) {
-              return result as T[];
-            } else {
-              return (result[0] as T) || {};
-            }
+            return result as T[];
           })
           .catch((error: Error) => {
             throw error;
           });
       case MuscleEntity._model.modelName:
-        return this._model.
-        find(filter)
-        .skip( pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0 )
-        .limit(pageNumber !== undefined ? 6 : 0)
-        .then((result) => {
-          if (result.length > 1) {
+        return this._model
+          .find(filter)
+          .skip(pageNumber !== undefined ? (parseInt(pageNumber) - 1) * 6 : 0)
+          .limit(pageNumber !== undefined ? 6 : 0)
+          .then((result) => {
             return result as T[];
-          } else {
-            return (result[0] as T) || {};
-          }
-        })
-        .catch((error: Error) => {
-          throw error;
-        });
+          })
+          .catch((error: Error) => {
+            throw error;
+          });
       default:
         throw Exceptions.ENTITY_DOES_NOT_EXISTS;
     }
