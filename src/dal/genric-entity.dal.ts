@@ -21,7 +21,7 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
     }
     if ((entity as Object).hasOwnProperty("name")) {
       const res = await this._model.find({ name: (entity as any).name });
-      if (res) throw Exceptions.ENTITY_EXISTS;
+      if (res.length) throw Exceptions.ENTITY_EXISTS;
     }
     return this._model
       .create(entity)
@@ -77,10 +77,10 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
           .populate({
             path: "exercises",
             populate: [
-            { path: "muscles.primary"}, { path: "muscles.secondary" }, 
-            { path: "muscleGroup",
-            populate: { path: "muscles" }
-          }],
+              { path: "muscles.primary" },
+              { path: "muscles.secondary" },
+              { path: "muscleGroup", populate: { path: "muscles" } },
+            ],
           })
           .populate({
             path: "musclesGroups",
