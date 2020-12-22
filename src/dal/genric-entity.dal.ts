@@ -76,9 +76,12 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
           .limit(pageNumber !== undefined ? 6 : 0)
           .populate({
             path: "exercises",
+            populate: [{ path: "muscles.primary"}, { path: "muscles.secondary" }],
+          })
+          .populate({
+            path: "musclesGroups",
             populate: { path: "muscles" },
           })
-          .populate("musclesGroups")
           .then((result) => {
             return result as T[];
           })
