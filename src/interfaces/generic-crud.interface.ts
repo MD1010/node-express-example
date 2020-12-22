@@ -1,5 +1,6 @@
 export interface IReadEntity<T> {
-  find: (prop: any, pageNumber: string | undefined) => Promise<T | T[]> | any;
+  find: (filter: { [key: string]: any }, pageNumber: string | undefined) => Promise<T[]>;
+  findOne: (filter: { [key: string]: any }) => Promise<T>;
 }
 
 export interface IWriteEntity<T> {

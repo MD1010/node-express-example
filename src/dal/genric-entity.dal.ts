@@ -62,6 +62,11 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
       });
   }
 
+  async findOne(filter: { [key: string]: any }) {
+    const [result] = await this.find(filter);
+    return result;
+  }
+
   find(filter: { [key: string]: any }, pageNumber?: string | undefined) {
     switch (this._model.modelName) {
       case TrainingEntity._model.modelName:

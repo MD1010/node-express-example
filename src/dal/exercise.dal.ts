@@ -4,11 +4,11 @@ import { toObjectId } from "../utils/base-id";
 
 export namespace ExerciseDAL {
   export const getExercisesByMuscleGroup = async (muscleGroupName: string) => {
-    const muscleGroup = (await MuscleGroupEntity.find({ name: muscleGroupName })) as IMuscleGroup[];
+    const muscleGroup = (await MuscleGroupEntity.findOne({ name: muscleGroupName })) as IMuscleGroup;
     return ExerciseEntity.getModel()
       .aggregate([
         {
-          $match: { muscleGroup: toObjectId(muscleGroup[0]._id!) },
+          $match: { muscleGroup: toObjectId(muscleGroup._id!) },
         },
         {
           $lookup: {

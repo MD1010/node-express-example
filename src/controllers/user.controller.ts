@@ -15,7 +15,7 @@ export class UserController extends GenericCrudController<User> {
 
   login = errorHandler(async (req: Request, res: Response) => {
     const { username, password } = req.body;
-    const [user] = await UserEntity.find({ username });
+    const user = await UserEntity.findOne({ username });
     if (!user || !user.isAdmin || !bcrypt.compareSync(password, user.password)) throw Exceptions.UNAUTHORIZED;
 
     var token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET!, {
