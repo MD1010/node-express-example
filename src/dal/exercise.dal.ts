@@ -104,7 +104,7 @@ export namespace ExerciseDAL {
             group: { $first: "$muscleGroup.name" },
             exercises: {
               $push: {
-                id: "$_id",
+                _id: "$_id",
                 name: "$name",
                 video: "$video",
                 muscles: "$muscles",
