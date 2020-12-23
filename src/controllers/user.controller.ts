@@ -18,12 +18,12 @@ export class UserController extends GenericCrudController<User> {
     const user = await UserEntity.findOne({ username });
     if (!user || !user.isAdmin || !bcrypt.compareSync(password, user.password)) throw Exceptions.UNAUTHORIZED;
 
-    var token = jwt.sign({ id: user[0]._id }, process.env.ACCESS_TOKEN_SECRET!, {
+    var token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: 86400, // 24 hours
     });
 
     res.json({
-      username: user[0].username,
+      username: user.username,
       accessToken: token,
     });
   });
