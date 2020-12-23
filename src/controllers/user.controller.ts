@@ -53,10 +53,10 @@ export class UserController extends GenericCrudController<User> {
     }
   );
   likeTraining = errorHandler(async (req: Request, res: Response) => {
-    let likesToAdd = req.body.dataToSend.likes;
-    let userLikedObject = req.body.dataToSend.user;
-    let objectId = req.body.dataToSend.objectId;
-    let objectType = req.body.dataToSend.type;
+    let likesToAdd = req.body.likes;
+    let userLikedObject = req.body.user;
+    let objectId = req.body.objectId;
+    let objectType = req.body.type;
 
     let response = await UserDAL.updateLikes(
       objectId,
