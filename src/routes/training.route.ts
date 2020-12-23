@@ -15,4 +15,3 @@ trainingRouter.post("/", trainingController.createTraining);
 trainingRouter.put("/:id", trainingController.updateTraining);
 trainingRouter.get("/:id", trainingController.getTraining);
 trainingRouter.delete("/:id", trainingController.deleteTraining);
-trainingRouter.post("/like", trainingController.likeTraining);

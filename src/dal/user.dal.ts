@@ -1,13 +1,20 @@
-import {UserEntity } from "../entities";
+import {
+  ExerciseEntity,
+  PostEntity,
+  TrainingEntity,
+  UserEntity,
+} from "../entities";
 import { toObjectId } from "../utils/base-id";
 
 export namespace UserDAL {
-
-  export const AddExcericeToDayTraining = async (username: string, exerciseID: string, personalPreferences: any) => {
-    return UserEntity.getModel()
-    .update(
+  export const AddExcericeToDayTraining = async (
+    username: string,
+    exerciseID: string,
+    personalPreferences: any
+  ) => {
+    return UserEntity.getModel().update(
       {
-        "username": username,
+        username: username,
       },
       {
         $push: {
@@ -15,39 +22,40 @@ export namespace UserDAL {
             exercise: toObjectId(exerciseID),
             reps: parseInt(personalPreferences.reps),
             sets: parseInt(personalPreferences.sets),
-            restTime: parseInt(personalPreferences.restTime) 
-          }
-        }
+            restTime: parseInt(personalPreferences.restTime),
+          },
+        },
       },
       {
         upsert: true,
-        arrayFilters: [
-          { "elem.day": parseInt(personalPreferences.day)},
-        ]
+        arrayFilters: [{ "elem.day": parseInt(personalPreferences.day) }],
       }
-    )
-  }
+    );
+  };
 
-  export const TrainingsByMuslceGroup = async (username: string, day: string) => {
+  export const TrainingsByMuslceGroup = async (
+    username: string,
+    day: string
+  ) => {
     return UserEntity.getModel()
       .aggregate([
         {
           $match: { username: username },
         },
         {
-            $unwind: {
-                path: "$trainings",
-                preserveNullAndEmptyArrays: true
-            }
+          $unwind: {
+            path: "$trainings",
+            preserveNullAndEmptyArrays: true,
+          },
         },
         {
-            $match: { "trainings.day": parseInt(day) },
-          },
+          $match: { "trainings.day": parseInt(day) },
+        },
         {
-            $unwind: {
-                path: "$trainings.exercises",
-                preserveNullAndEmptyArrays: true
-            }
+          $unwind: {
+            path: "$trainings.exercises",
+            preserveNullAndEmptyArrays: true,
+          },
         },
         {
           $lookup: {
@@ -59,10 +67,10 @@ export namespace UserDAL {
         },
         {
           $unwind: {
-              path: "$trainings.exercises.exercise",
-              preserveNullAndEmptyArrays: true
-          }
-      },
+            path: "$trainings.exercises.exercise",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
         {
           $lookup: {
             from: "muscles",
@@ -102,19 +110,21 @@ export namespace UserDAL {
           },
         },
         {
-            $group: {
-                "_id": "$trainings.exercises.exercise.muscleGroup",
-                muscleGroup:{$first: "$trainings.exercises.exercise.muscleGroup.name"},
-                exercises: {$push: "$trainings.exercises"}
-            }
+          $group: {
+            _id: "$trainings.exercises.exercise.muscleGroup",
+            muscleGroup: {
+              $first: "$trainings.exercises.exercise.muscleGroup.name",
+            },
+            exercises: { $push: "$trainings.exercises" },
+          },
         },
         {
-            $project: {
-                "_id": 0,
-                muscleGroup: 1,
-                exercises: 1
-            }
-        }
+          $project: {
+            _id: 0,
+            muscleGroup: 1,
+            exercises: 1,
+          },
+        },
       ])
       .then((result) => {
         return result;
@@ -122,5 +132,43 @@ export namespace UserDAL {
       .catch((error: Error) => {
         throw error;
       });
+  };
+  export const updateLikes = async (
+    objectId: string,
+    userName: string,
+    likesChange: number,
+    objectType: string
+  ) => {
+    type entityType = typeof TrainingEntity | typeof PostEntity;
+    let entity: entityType;
+    entity = objectType == "training" ? TrainingEntity : PostEntity;
+    console.log(entity);
+    if (likesChange == 1) {
+      return entity.getModel().updateOne(
+        {
+          _id: toObjectId(objectId),
+        },
+        {
+          $inc: {
+            numOfLikes: likesChange,
+          },
+
+          $push: { likedBy: userName },
+        }
+      );
+    } else {
+      return entity.getModel().updateOne(
+        {
+          _id: toObjectId(objectId),
+        },
+        {
+          $inc: {
+            numOfLikes: likesChange,
+          },
+
+          $pull: { likedBy: userName },
+        }
+      );
+    }
   };
 }

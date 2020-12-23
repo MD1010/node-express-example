@@ -169,42 +169,4 @@ export namespace TrainingDAL {
         throw error;
       });
   };
-
-  export const updateLikes = async (
-    objectId: string,
-    userName: string,
-    likesChange: number,
-    objectType: string
-  ) => {
-    type entityType = typeof TrainingEntity | typeof ExerciseEntity;
-    let entity: entityType;
-    entity = objectType == "training" ? TrainingEntity : ExerciseEntity;
-    if (likesChange == 1) {
-      return entity.getModel().updateOne(
-        {
-          _id: toObjectId(objectId),
-        },
-        {
-          $inc: {
-            numOfLikes: likesChange,
-          },
-
-          $push: { likedBy: userName },
-        }
-      );
-    } else {
-      return TrainingEntity.getModel().updateOne(
-        {
-          _id: toObjectId(objectId),
-        },
-        {
-          $inc: {
-            numOfLikes: likesChange,
-          },
-
-          $pull: { likedBy: userName },
-        }
-      );
-    }
-  };
 }
