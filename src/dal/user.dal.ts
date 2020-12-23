@@ -109,7 +109,6 @@ export namespace UserDAL {
             _id: 0,
             muscleGroup: 1,
             exercises: 1,
-            _v: 0,
           },
         },
       ])

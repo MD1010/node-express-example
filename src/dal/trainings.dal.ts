@@ -1,6 +1,5 @@
 import { TrainingEntity } from "../entities";
 import { Training } from "../models";
-import { Request, Response } from "express";
 
 export namespace TrainingDAL {
   export const getTrainingsByName = (trainingName: string) => {
@@ -158,7 +157,6 @@ export namespace TrainingDAL {
         {
           $project: {
             _id: 0,
-            _v: 0,
           },
         },
       ])
