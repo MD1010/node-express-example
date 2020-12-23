@@ -7,9 +7,10 @@ export abstract class GenericCrudController<T extends Document> {
   constructor(protected dbEntity: DbEnity<T>) {}
 
   protected getAllEntites = errorHandler(async (req: Request, res: Response) => {
-    console.log(req.query.pageNumber);
+    console.log(req.query)
+    const {pageNumber, ...filter} = req.query
     return res.json(
-      await this.dbEntity.find({}, typeof req.query.pageNumber === "string" ? req.query.pageNumber : undefined)
+      await this.dbEntity.find(filter, pageNumber?.toString())
     );
   });
 
@@ -17,7 +18,7 @@ export abstract class GenericCrudController<T extends Document> {
     return res.json(
       await this.dbEntity.find(
         { _id: req.params.id },
-        typeof req.query.pageNumber === "string" ? req.query.pageNumber : undefined
+        req.query.pageNumber?.toString()
       )
     );
   });

@@ -1,13 +1,11 @@
-import {UserEntity } from "../entities";
+import { UserEntity } from "../entities";
 import { toObjectId } from "../utils/base-id";
 
 export namespace UserDAL {
-
   export const AddExcericeToDayTraining = async (username: string, exerciseID: string, personalPreferences: any) => {
-    return UserEntity.getModel()
-    .update(
+    return UserEntity.getModel().update(
       {
-        "username": username,
+        username: username,
       },
       {
         $push: {
@@ -15,18 +13,16 @@ export namespace UserDAL {
             exercise: toObjectId(exerciseID),
             reps: parseInt(personalPreferences.reps),
             sets: parseInt(personalPreferences.sets),
-            restTime: parseInt(personalPreferences.restTime) 
-          }
-        }
+            restTime: parseInt(personalPreferences.restTime),
+          },
+        },
       },
       {
         upsert: true,
-        arrayFilters: [
-          { "elem.day": parseInt(personalPreferences.day)},
-        ]
+        arrayFilters: [{ "elem.day": parseInt(personalPreferences.day) }],
       }
-    )
-  }
+    );
+  };
 
   export const TrainingsByMuslceGroup = async (username: string, day: string) => {
     return UserEntity.getModel()
@@ -35,19 +31,19 @@ export namespace UserDAL {
           $match: { username: username },
         },
         {
-            $unwind: {
-                path: "$trainings",
-                preserveNullAndEmptyArrays: true
-            }
+          $unwind: {
+            path: "$trainings",
+            preserveNullAndEmptyArrays: true,
+          },
         },
         {
-            $match: { "trainings.day": parseInt(day) },
-          },
+          $match: { "trainings.day": parseInt(day) },
+        },
         {
-            $unwind: {
-                path: "$trainings.exercises",
-                preserveNullAndEmptyArrays: true
-            }
+          $unwind: {
+            path: "$trainings.exercises",
+            preserveNullAndEmptyArrays: true,
+          },
         },
         {
           $lookup: {
@@ -59,10 +55,10 @@ export namespace UserDAL {
         },
         {
           $unwind: {
-              path: "$trainings.exercises.exercise",
-              preserveNullAndEmptyArrays: true
-          }
-      },
+            path: "$trainings.exercises.exercise",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
         {
           $lookup: {
             from: "muscles",
@@ -102,19 +98,20 @@ export namespace UserDAL {
           },
         },
         {
-            $group: {
-                "_id": "$trainings.exercises.exercise.muscleGroup",
-                muscleGroup:{$first: "$trainings.exercises.exercise.muscleGroup.name"},
-                exercises: {$push: "$trainings.exercises"}
-            }
+          $group: {
+            _id: "$trainings.exercises.exercise.muscleGroup",
+            muscleGroup: { $first: "$trainings.exercises.exercise.muscleGroup.name" },
+            exercises: { $push: "$trainings.exercises" },
+          },
         },
         {
-            $project: {
-                "_id": 0,
-                muscleGroup: 1,
-                exercises: 1
-            }
-        }
+          $project: {
+            _id: 0,
+            muscleGroup: 1,
+            exercises: 1,
+            _v: 0,
+          },
+        },
       ])
       .then((result) => {
         return result;
