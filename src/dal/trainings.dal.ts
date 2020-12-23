@@ -159,7 +159,6 @@ export namespace TrainingDAL {
         {
           $project: {
             _id: 0,
-            _v: 0,
           },
         },
       ])
