@@ -17,16 +17,16 @@ export class UserController extends GenericCrudController<User> {
 
   login = errorHandler(async (req: Request, res: Response) => {
     const { username, password } = req.body;
-    const user = await UserEntity.find({ username }) as IUser;
-    if (!user || !user.isAdmin || !bcrypt.compareSync(password, user.password))
+    const user = await UserEntity.find({ username }) as IUser[];
+    if (!user || !user[0].isAdmin || !bcrypt.compareSync(password, user[0].password))
       throw Exceptions.UNAUTHORIZED;
 
-    var token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET!, {
+    var token = jwt.sign({ id: user[0]._id }, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: 86400, // 24 hours
     });
 
     res.json({
-      username: user.username,
+      username: user[0].username,
       accessToken: token,
     });
   });

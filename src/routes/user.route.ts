@@ -6,7 +6,4 @@ const userController = new UserController();
 
 userRouter.get("/:username/trainings/:day", userController.getUserTrainingsByMuscleGroup);
 userRouter.post("/:username/trainings", userController.AddExcericeToDayTraining);
-
-
-
 userRouter.post("/login", userController.login);
