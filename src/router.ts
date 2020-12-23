@@ -1,20 +1,7 @@
 import { Request, Response, Router } from "express";
 import { scrapData } from "./controllers/utils/scrape";
-
-import {
-  ExerciseEntity,
-  MuscleEntity,
-  MuscleGroupEntity,
-  TrainingEntity,
-} from "./entities";
-import {
-  userRouter,
-  exerciseRouter,
-  trainingRouter,
-  muscleGroupRouter,
-  muscleRouter,
-  postRouter,
-} from "./routes";
+import { ExerciseEntity, MuscleEntity, MuscleGroupEntity } from "./entities";
+import { exerciseRouter, muscleGroupRouter, muscleRouter, postRouter, trainingRouter, userRouter } from "./routes";
 import { errorHandler } from "./utils/errorHandler";
 
 export const appRouter = Router();
@@ -22,7 +9,7 @@ export const appRouter = Router();
 appRouter.use("/api/users", userRouter);
 appRouter.use("/api/exercises", exerciseRouter);
 appRouter.use("/api/trainings", trainingRouter);
-appRouter.use("/api/tags", muscleGroupRouter);
+appRouter.use("/api/muscleGroups", muscleGroupRouter);
 appRouter.use("/api/muscles", muscleRouter);
 appRouter.use("/api/posts", postRouter);
 

@@ -1,15 +1,14 @@
-import { ExerciseEntity, MuscleGroupEntity } from "../entities";
-import { Exercise, MuscleGroup, Training } from "../models";
-import { toObjectId } from "../utils/base-id";
 import { IMuscleGroup } from "gymstagram-common";
+import { ExerciseEntity, MuscleGroupEntity } from "../entities";
+import { toObjectId } from "../utils/base-id";
 
 export namespace ExerciseDAL {
   export const getExercisesByMuscleGroup = async (muscleGroupName: string) => {
-    const muscleGroup = (await MuscleGroupEntity.find({ name: muscleGroupName })) as IMuscleGroup[];
+    const muscleGroup = (await MuscleGroupEntity.findOne({ name: muscleGroupName })) as IMuscleGroup;
     return ExerciseEntity.getModel()
       .aggregate([
         {
-          $match: { muscleGroup: toObjectId(muscleGroup[0]._id!) },
+          $match: { muscleGroup: toObjectId(muscleGroup._id!) },
         },
         {
           $lookup: {
@@ -103,7 +102,7 @@ export namespace ExerciseDAL {
           $group: {
             _id: "$muscleGroup.name",
             group: { $first: "$muscleGroup.name" },
-            excerices: {
+            exercises: {
               $push: {
                 _id: "$_id",
                 name: "$name",
@@ -113,9 +112,9 @@ export namespace ExerciseDAL {
                 instructions: "$instructions",
                 image: "$image",
               },
-          }
+            },
+          },
         },
-      },
         {
           $project: {
             _id: 0,
