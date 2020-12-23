@@ -123,7 +123,9 @@ async function generateExercise(exerciseObject: any, createdMuscleGroupId: strin
   let finalExercise;
   await Promise.all(
     exerciseObject.muscles.primary.map(async (primaryMuscle: any) => {
-      const res = (await MuscleEntity.findOne({ name: primaryMuscle })) as IMuscle;
+      const res = (await MuscleEntity.findOne({
+        name: primaryMuscle,
+      })) as IMuscle;
       if (res) {
         primaryIds.push(res._id);
       }

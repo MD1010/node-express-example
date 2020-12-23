@@ -6,10 +6,7 @@ const trainingController = new TrainingController();
 
 trainingRouter.get("/name/:name", trainingController.getTrainingsByName);
 trainingRouter.get("/", trainingController.getAllTrainings);
-trainingRouter.get(
-  "/sortedTraining/:sortBy",
-  trainingController.getSortedTrainings
-);
+trainingRouter.get("/sortedTraining/:sortBy", trainingController.getSortedTrainings);
 trainingRouter.get("/muscleGroups", trainingController.groupByMuscleGroup);
 trainingRouter.post("/", trainingController.createTraining);
 trainingRouter.put("/:id", trainingController.updateTraining);
