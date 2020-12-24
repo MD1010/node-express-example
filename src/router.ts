@@ -7,7 +7,7 @@ import { errorHandler } from "./utils/errorHandler";
 
 export const appRouter = Router();
 
-appRouter.use("/api/users", authenticateJWT, userRouter);
+appRouter.use("/api/users", userRouter);
 appRouter.use("/api/exercises", authenticateJWT, exerciseRouter);
 appRouter.use("/api/trainings", authenticateJWT, trainingRouter);
 appRouter.use("/api/muscleGroups", authenticateJWT, muscleGroupRouter);
