@@ -7,5 +7,15 @@ const userController = new UserController();
 
 userRouter.post("/login", userController.login);
 
-userRouter.get("/:username/trainings/:day", authenticateJWT, userController.getUserTrainingsByMuscleGroup);
-userRouter.post("/:username/trainings", authenticateJWT, userController.AddExcericeToDayTraining);
+userRouter.get(
+  "/:username/trainings/:day",
+  authenticateJWT,
+  userController.getUserTrainingsByMuscleGroup
+);
+userRouter.post(
+  "/:username/trainings",
+  authenticateJWT,
+  userController.AddExcericeToDayTraining
+);
+
+userRouter.post("/like", authenticateJWT, userController.likeTraining);

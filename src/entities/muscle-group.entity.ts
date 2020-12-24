@@ -9,7 +9,7 @@ const MuscleGroupSchema: Schema = new Schema(
     muscles: [{ type: Schema.Types.ObjectId, required: true, ref: "Muscle" }],
     image: { type: String, required: true },
   },
-  { collection: "muscleGroups" }
+  { collection: "muscleGroups", versionKey: false }
 );
 
 export const MuscleGroupEntity = new DbEnity<MuscleGroup>("MuscleGroup", MuscleGroupSchema);
