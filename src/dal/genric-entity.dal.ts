@@ -1,10 +1,21 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import { ExerciseEntity, MuscleEntity, MuscleGroupEntity, PostEntity, TrainingEntity, UserEntity } from "../entities";
-import { IReadEntity, IWriteEntity } from "../interfaces/generic-crud.interface";
+import {
+  ExerciseEntity,
+  MuscleEntity,
+  MuscleGroupEntity,
+  PostEntity,
+  TrainingEntity,
+  UserEntity,
+} from "../entities";
+import {
+  IReadEntity,
+  IWriteEntity,
+} from "../interfaces/generic-crud.interface";
 import { Exceptions } from "../utils";
 import { toObjectId } from "./../utils/base-id";
 
-export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity<T> {
+export class DbEnity<T extends Document>
+  implements IReadEntity<T>, IWriteEntity<T> {
   protected _model: Model<Document>;
 
   constructor(modelName: string, schema: Schema) {
