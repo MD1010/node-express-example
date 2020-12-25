@@ -2,8 +2,8 @@ import { Request, Response, Router } from "express";
 import { scrapData } from "./controllers/utils/scrape";
 import { ExerciseEntity, MuscleEntity, MuscleGroupEntity } from "./entities";
 import { exerciseRouter, muscleGroupRouter, muscleRouter, postRouter, trainingRouter, userRouter } from "./routes";
-import { errorHandler } from "./utils/errorHandler";
 import { authenticateJWT } from "./utils/auth";
+import { errorHandler } from "./utils/errorHandler";
 
 export const appRouter = Router();
 
@@ -25,7 +25,7 @@ appRouter.post(
     res.send();
   })
 );
-appRouter.delete("/delete", async (req, res) => {
+appRouter.delete("/scrap", async (req, res) => {
   await ExerciseEntity.getModel().deleteMany({});
   await MuscleGroupEntity.getModel().deleteMany({});
   await MuscleEntity.getModel().deleteMany({});
