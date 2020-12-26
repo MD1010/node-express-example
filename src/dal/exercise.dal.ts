@@ -128,4 +128,21 @@ export namespace ExerciseDAL {
         throw error;
       });
   };
+
+  export const getExercisesByMuscle = (muslceID: string) => {
+    return ExerciseEntity.getModel()
+      .find({ $or: [{ "muscles.primary": toObjectId(muslceID) }, { "muscles.secondary": toObjectId(muslceID) }] })
+      .populate({
+        path: "muscleGroup",
+        populate: { path: "muscles" },
+      })
+      .populate("muscles.primary")
+      .populate("muscles.secondary")
+      .then((result) => {
+        return result;
+      })
+      .catch((error: Error) => {
+        throw error;
+      });
+  };
 }
