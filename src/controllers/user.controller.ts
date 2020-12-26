@@ -16,8 +16,7 @@ export class UserController extends GenericCrudController<User> {
   login = errorHandler(async (req: Request, res: Response) => {
     const { username, password } = req.body;
     const user = await UserEntity.findOne({ username });
-    if (!user || !user.isAdmin || !bcrypt.compareSync(password, user.password))
-      throw Exceptions.UNAUTHORIZED;
+    if (!user || !user.isAdmin || !bcrypt.compareSync(password, user.password)) throw Exceptions.UNAUTHORIZED;
 
     var token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: 86400, // 24 hours
@@ -29,41 +28,23 @@ export class UserController extends GenericCrudController<User> {
     });
   });
 
-  getAllUsers = this.getAllEntites;
-  getUserTrainingsByMuscleGroup = errorHandler(
-    async (req: Request, res: Response) => {
-      return res.json(
-        await UserDAL.TrainingsByMuslceGroup(
-          req.params.username,
-          req.params.day
-        )
-      );
-    }
-  );
+  getAllUsers = this.getEntities;
+  getUserTrainingsByMuscleGroup = errorHandler(async (req: Request, res: Response) => {
+    return res.json(await UserDAL.TrainingsByMuslceGroup(req.params.username, req.params.day));
+  });
 
-  AddExcericeToDayTraining = errorHandler(
-    async (req: Request, res: Response) => {
-      return res.json(
-        await UserDAL.AddExcericeToDayTraining(
-          req.params.username,
-          req.body.exerciseID,
-          req.body.personalPreferences
-        )
-      );
-    }
-  );
+  AddExcericeToDayTraining = errorHandler(async (req: Request, res: Response) => {
+    return res.json(
+      await UserDAL.AddExcericeToDayTraining(req.params.username, req.body.exerciseID, req.body.personalPreferences)
+    );
+  });
   likeTraining = errorHandler(async (req: Request, res: Response) => {
     let likesToAdd = req.body.likes;
     let userLikedObject = req.body.user;
     let objectId = req.body.objectId;
     let objectType = req.body.type;
 
-    let response = await UserDAL.updateLikes(
-      objectId,
-      userLikedObject,
-      likesToAdd,
-      objectType
-    );
+    let response = await UserDAL.updateLikes(objectId, userLikedObject, likesToAdd, objectType);
     res.json(response);
   });
 }

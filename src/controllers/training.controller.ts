@@ -13,7 +13,7 @@ export class TrainingController extends GenericCrudController<Training> {
     super(TrainingEntity);
   }
 
-  getAllTrainings = this.getAllEntites;
+  getAllTrainings = this.getEntities;
   getTraining = this.getEntityById;
   updateTraining = this.updateEntity;
   deleteTraining = this.deleteEntity;
