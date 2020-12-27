@@ -1,13 +1,13 @@
+import { MuscleEntity } from "../entities";
 import { Muscle } from "../models";
 import { GenericCrudController } from "./utils/generic-crud.controller";
-import { MuscleEntity } from "../entities";
 
 export class MuscleController extends GenericCrudController<Muscle> {
   constructor() {
     super(MuscleEntity);
   }
 
-  getAllMuscles = this.getAllEntites;
+  getAllMuscles = this.getEntities;
   createMuscle = this.createEntity;
   getMuscle = this.getEntityById;
   updateMuscle = this.updateEntity;
