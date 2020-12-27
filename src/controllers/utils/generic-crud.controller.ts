@@ -8,7 +8,10 @@ export abstract class GenericCrudController<T extends Document> {
   constructor(protected dbEntity: DbEnity<T>) {}
 
   protected getEntities = errorHandler(async (req: Request, res: Response) => {
-    const { pageNumber, ...filter } = req.query;
+    let { pageNumber, ...filter } = req.query;
+    if (filter.name) {
+      filter = { name: new RegExp(["^", filter.name].join(""), "i") as any };
+    }
     const entities = await this.dbEntity.find(filter, pageNumber?.toString());
     if (isEmpty(filter) && isEmpty(pageNumber)) {
       return res.json(entities);
