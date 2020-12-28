@@ -79,12 +79,15 @@ export class DbEnity<T extends Document>
   }
 
   find(filter: { [key: string]: any }, pageNumber?: string) {
+    if (pageNumber && +pageNumber < 1) throw Exceptions.BAD_REQUEST;
+
+    const pageLimit = 6;
     switch (this._model.modelName) {
       case TrainingEntity._model.modelName:
         return this._model
           .find(filter)
-          .skip(pageNumber ? (parseInt(pageNumber) - 1) * 6 : 0)
-          .limit(pageNumber ? 6 : 0)
+          .skip(pageNumber ? (+pageNumber - 1) * pageLimit : 0)
+          .limit(pageNumber ? pageLimit : 0)
           .populate({
             path: "exercises",
             populate: [
@@ -106,8 +109,8 @@ export class DbEnity<T extends Document>
       case UserEntity._model.modelName:
         return this._model
           .find(filter)
-          .skip(pageNumber ? (parseInt(pageNumber) - 1) * 6 : 0)
-          .limit(pageNumber ? 6 : 0)
+          .skip(pageNumber ? (+pageNumber - 1) * pageLimit : 0)
+          .limit(pageNumber ? pageLimit : 0)
           .populate({
             path: "exercises",
             populate: { path: "muscles" },
@@ -121,8 +124,8 @@ export class DbEnity<T extends Document>
       case MuscleGroupEntity._model.modelName:
         return this._model
           .find(filter)
-          .skip(pageNumber ? (parseInt(pageNumber) - 1) * 6 : 0)
-          .limit(pageNumber ? 6 : 0)
+          .skip(pageNumber ? (+pageNumber - 1) * pageLimit : 0)
+          .limit(pageNumber ? pageLimit : 0)
           .populate("muscles")
           .then((result) => {
             return result as T[];
@@ -131,11 +134,10 @@ export class DbEnity<T extends Document>
             throw error;
           });
       case ExerciseEntity._model.modelName:
-        console.log(pageNumber);
         return this._model
           .find(filter)
-          .skip(pageNumber ? (parseInt(pageNumber) - 1) * 6 : 0)
-          .limit(pageNumber ? 6 : 0)
+          .skip(pageNumber ? (+pageNumber - 1) * pageLimit : 0)
+          .limit(pageNumber ? pageLimit : 0)
           .populate({
             path: "muscleGroup",
             populate: { path: "muscles" },
@@ -151,8 +153,8 @@ export class DbEnity<T extends Document>
       case PostEntity._model.modelName:
         return this._model
           .find(filter)
-          .skip(pageNumber ? (parseInt(pageNumber) - 1) * 6 : 0)
-          .limit(pageNumber ? 6 : 0)
+          .skip(pageNumber ? (+pageNumber - 1) * pageLimit : 0)
+          .limit(pageNumber ? pageLimit : 0)
           .populate({
             path: "trainingID",
             populate: [
@@ -174,8 +176,8 @@ export class DbEnity<T extends Document>
       case MuscleEntity._model.modelName:
         return this._model
           .find(filter)
-          .skip(pageNumber ? (parseInt(pageNumber) - 1) * 6 : 0)
-          .limit(pageNumber ? 6 : 0)
+          .skip(pageNumber ? (+pageNumber - 1) * pageLimit : 0)
+          .limit(pageNumber ? pageLimit : 0)
           .then((result) => {
             return result as T[];
           })

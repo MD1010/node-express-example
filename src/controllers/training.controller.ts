@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+//import { generateTraining } from "./utils/generate-training";
+import getVideoDurationInSeconds from "get-video-duration";
 import { orderBy } from "lodash";
 import { TrainingDAL } from "../dal/trainings.dal";
 import { TrainingEntity } from "../entities";
@@ -6,14 +8,13 @@ import { Training } from "../models";
 import { errorHandler } from "../utils/errorHandler";
 import { socketServer } from "../utils/socketManager";
 import { GenericCrudController } from "./utils/generic-crud.controller";
-//import { generateTraining } from "./utils/generate-training";
 
 export class TrainingController extends GenericCrudController<Training> {
   constructor() {
     super(TrainingEntity);
   }
 
-  getAllTrainings = this.getAllEntites;
+  getAllTrainings = this.getEntities;
   getTraining = this.getEntityById;
   updateTraining = this.updateEntity;
   deleteTraining = this.deleteEntity;
@@ -24,7 +25,10 @@ export class TrainingController extends GenericCrudController<Training> {
     return res.json(await TrainingDAL.getTrainingsByName(req.params.name));
   });
   createTraining = errorHandler(async (req: Request, res: Response) => {
-    let newEntity = await this.dbEntity.create(req.body);
+    const training: Training = { ...req.body };
+    //todo - DOV fix this getVideoDurationInSeconds doenst work with youtube
+    training.duration = await getVideoDurationInSeconds(training.video);
+    let newEntity = await this.dbEntity.create(training);
     socketServer.sockets.emit("new_training");
     return res.json({ created: newEntity._id });
   });
