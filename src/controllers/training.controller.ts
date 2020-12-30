@@ -8,6 +8,7 @@ import { Training } from "../models";
 import { errorHandler } from "../utils/errorHandler";
 import { socketServer } from "../utils/socketManager";
 import { GenericCrudController } from "./utils/generic-crud.controller";
+import { ITraining } from "gymstagram-common";
 
 export class TrainingController extends GenericCrudController<Training> {
   constructor() {
@@ -33,9 +34,27 @@ export class TrainingController extends GenericCrudController<Training> {
     return res.json({ created: newEntity._id });
   });
   getSortedTrainings = errorHandler(async (req: Request, res: Response) => {
+    console.log(req.params);
+    console.log(req.query);
+    let sortedTrainings: ITraining[] = [];
     let sortBy = req.params.sortBy;
-    let trainings = await this.dbEntity.find({});
-    let sortedTrainings = orderBy(trainings, [sortBy], ["desc"]);
+    let trainingName = req.query.name;
+    if (trainingName != undefined) {
+      sortedTrainings = orderBy(
+        await this.dbEntity.find({
+          $query: { name: { $regex: `.*${trainingName}.*` } },
+        }),
+        [sortBy],
+        ["desc"]
+      );
+    } else {
+      sortedTrainings = orderBy(
+        await this.dbEntity.find({}),
+        [sortBy],
+        ["desc"]
+      );
+    }
+
     res.json(sortedTrainings);
   });
 }
