@@ -9,7 +9,6 @@ const PostSchema: Schema = new Schema({
   numOfLikes: { type: Number, default: 0 },
   likedBy: [{ type: String, default: [] }],
   createdAt: { type: Schema.Types.Date, required: true },
-  video: { type: String, required: true },
 });
 
 export const PostEntity = new DbEnity<Post>("Post", PostSchema);
