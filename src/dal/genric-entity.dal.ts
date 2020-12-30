@@ -148,11 +148,16 @@ export class DbEnity<T extends Document> implements IReadEntity<T>, IWriteEntity
             path: "trainingID",
             populate: [
               {
-                path: "exercises",
+                path: "musclesGroups",
                 populate: { path: "muscles" },
               },
               {
-                path: "muscleGroups",
+                path: "exercises",
+                populate: [
+                  { path: "muscles.primary" },
+                  { path: "muscles.secondary" },
+                  { path: "muscleGroup", populate: { path: "muscles" } },
+                ],
               },
             ],
           })
