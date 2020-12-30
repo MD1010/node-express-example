@@ -29,7 +29,7 @@ export class TrainingController extends GenericCrudController<Training> {
     let youtubeVideo = await youtube.search(training.video);
     training.duration = youtubeVideo.videos[0].duration;
     let newEntity = await this.dbEntity.create(training);
-    socketServer.sockets.emit("new_training");
+    socketServer.sockets.emit("newItem", "training");
     return res.json({ created: newEntity._id });
   });
   getSortedTrainings = errorHandler(async (req: Request, res: Response) => {

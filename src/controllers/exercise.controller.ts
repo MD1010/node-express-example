@@ -17,7 +17,7 @@ export class ExerciseController extends GenericCrudController<Exercise> {
 
   createExercise = errorHandler(async (req: Request, res: Response) => {
     const newEntity = await this.dbEntity.create(req.body);
-    socketServer.sockets.emit("new_exercise");
+    socketServer.sockets.emit("newItem", "exercise");
     return res.json({ created: newEntity._id });
   });
 
@@ -25,9 +25,13 @@ export class ExerciseController extends GenericCrudController<Exercise> {
     return res.json(await ExerciseDAL.getExercisesByMuscle(req.params.id));
   });
 
-  getExercisesByMuscleGroup = errorHandler(async (req: Request, res: Response) => {
-    return res.json(await ExerciseDAL.getExercisesByMuscleGroup(req.params.name));
-  });
+  getExercisesByMuscleGroup = errorHandler(
+    async (req: Request, res: Response) => {
+      return res.json(
+        await ExerciseDAL.getExercisesByMuscleGroup(req.params.name)
+      );
+    }
+  );
 
   groupByMuscleGroup = errorHandler(async (req: Request, res: Response) => {
     return res.json(await ExerciseDAL.groupByMuscleGroup());
