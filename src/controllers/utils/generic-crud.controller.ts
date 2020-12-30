@@ -38,7 +38,9 @@ export abstract class GenericCrudController<T extends Document> {
   });
 
   protected deleteEntity = errorHandler(async (req: Request, res: Response) => {
+    let obj = await this.dbEntity.findOne({ _id: req.params.id });
     await this.dbEntity.deleteOne(req.params.id);
+    await obj.remove();
     return res.json({ deleted: req.params.id });
   });
 }

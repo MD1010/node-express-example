@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 //import { generateTraining } from "./utils/generate-training";
-import getVideoDurationInSeconds from "get-video-duration";
+import youtube from "scrape-youtube";
 import { orderBy } from "lodash";
 import { TrainingDAL } from "../dal/trainings.dal";
 import { TrainingEntity } from "../entities";
@@ -26,8 +26,8 @@ export class TrainingController extends GenericCrudController<Training> {
   });
   createTraining = errorHandler(async (req: Request, res: Response) => {
     const training: Training = { ...req.body };
-    //todo - DOV fix this getVideoDurationInSeconds doenst work with youtube
-    training.duration = await getVideoDurationInSeconds(training.video);
+    let youtubeVideo = await youtube.search(training.video);
+    training.duration = youtubeVideo.videos[0].duration;
     let newEntity = await this.dbEntity.create(training);
     socketServer.sockets.emit("new_training");
     return res.json({ created: newEntity._id });
