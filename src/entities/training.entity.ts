@@ -14,7 +14,7 @@ const TrainingSchema: Schema = new Schema(
     numOfLikes: { type: Number, default: 0 },
     likedBy: [{ type: String, default: [] }],
     difficultyLevel: { type: Number, required: true },
-    duration: { type: Number, required: true },
+    duration: { type: Number },
   },
   { versionKey: false }
 );
