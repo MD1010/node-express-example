@@ -14,11 +14,13 @@ export class UserController extends GenericCrudController<User> {
   }
 
   login = errorHandler(async (req: Request, res: Response) => {
-    const { username, password } = req.body;
+    const { username, password, app } = req.body;
     const user = await UserEntity.findOne({ username });
-    if (!user || !user.isAdmin || !bcrypt.compareSync(password, user.password)) throw Exceptions.UNAUTHORIZED;
+    if (app === "admin" && (!user || !user.isAdmin || !bcrypt.compareSync(password, user.password)))
+      throw Exceptions.UNAUTHORIZED;
+    if (!user || !bcrypt.compareSync(password, user.password)) throw Exceptions.UNAUTHORIZED;
 
-    var token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET!, {
+    var token = jwt.sign({ identity: user.username }, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: 86400, // 24 hours
     });
 
