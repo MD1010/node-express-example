@@ -16,6 +16,7 @@ export abstract class GenericCrudController<T extends Document> {
       let arr = filter.muslces.toString().split(",");
       filter = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
     }
+
     const entities = await this.dbEntity.find(filter, pageNumber?.toString());
     if (isEmpty(filter) && isEmpty(pageNumber)) {
       return res.json(entities);
