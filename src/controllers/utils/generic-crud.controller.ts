@@ -11,6 +11,8 @@ export abstract class GenericCrudController<T extends Document> {
     let customFilter1 = {};
     let customFilter2 = {};
     let customFilter3 = {};
+    let customFilter4 = {};
+
     if (filter.name) {
       customFilter3 = { name: new RegExp([filter.name].join(""), "i") as any };
     }
@@ -24,7 +26,14 @@ export abstract class GenericCrudController<T extends Document> {
       customFilter2 = { muscleGroup: muscleGroup };
     }
 
-    const finalFilter = { $and: [{ ...customFilter3 }, { ...customFilter1 }, { ...customFilter2 }] };
+    if (filter.difficultyLevel) {
+      let difficultyLevel = filter.difficultyLevel.toString();
+      customFilter4 = { difficultyLevel: difficultyLevel };
+    }
+
+    const finalFilter = {
+      $and: [{ ...customFilter3 }, { ...customFilter1 }, { ...customFilter2 }, { ...customFilter4 }],
+    };
     const entities = await this.dbEntity.find(finalFilter, pageNumber?.toString());
 
     const totalFilteredRecords = (await this.dbEntity.getModel().find(finalFilter)).length;
