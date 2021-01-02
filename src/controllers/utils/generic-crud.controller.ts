@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { isEmpty } from "lodash";
 import { Document } from "mongoose";
 import { DbEnity } from "../../dal";
 import { errorHandler, toObjectId } from "../../utils";
@@ -14,11 +13,10 @@ export abstract class GenericCrudController<T extends Document> {
       let filter3 = { name: new RegExp([filter.name].join(""), "i") as any };
       customFilter = { ...filter3 };
     }
-    if (filter.muslces) {
-      let arr = filter.muslces.toString().split(",");
-      let filter1 = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
-      // customFilter = { $and: [{ ...customFilter }, { ...filter1 }] };
-      customFilter = { ...customFilter, ...filter1 };
+    if (filter.muscles) {
+      let arr = filter.muscles.toString().split(",");
+      filter = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
+      customFilter = { ...customFilter, ...filter };
     }
 
     if (filter.muscleGroup) {
@@ -28,11 +26,10 @@ export abstract class GenericCrudController<T extends Document> {
       customFilter = { $and: [{ ...customFilter }, { ...filter2 }] };
     }
 
-    console.log(customFilter);
-    const entities = await this.dbEntity.find(customFilter, pageNumber?.toString());
-    if (isEmpty(customFilter) && isEmpty(pageNumber)) {
-      return res.json(entities);
-    }
+    const entities = await this.dbEntity.find(filter, pageNumber?.toString());
+    // if (isEmpty(customFilter) && isEmpty(pageNumber)) {
+    //   return res.json(entities);
+    // }
     //for filter case total records has to be added for pagination
 
     const totalFilteredRecords = (await this.dbEntity.getModel().find(customFilter)).length;
