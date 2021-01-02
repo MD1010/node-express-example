@@ -15,24 +15,28 @@ export abstract class GenericCrudController<T extends Document> {
 
     if (filter.name) {
       customFilter3 = { name: new RegExp([filter.name].join(""), "i") as any };
+      delete filter.name;
     }
     if (filter.muscles) {
       let arr = filter.muscles.toString().split(",");
       customFilter1 = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
+      delete filter.muscles;
     }
 
     if (filter.muscleGroup) {
       let muscleGroup = filter.muscleGroup.toString();
       customFilter2 = { muscleGroup: muscleGroup };
+      delete filter.muscleGroup;
     }
 
     if (filter.difficultyLevel) {
       let difficultyLevel = filter.difficultyLevel.toString();
       customFilter4 = { difficultyLevel: difficultyLevel };
+      delete filter.difficultyLevel;
     }
 
     const finalFilter = {
-      $and: [{ ...customFilter3 }, { ...customFilter1 }, { ...customFilter2 }, { ...customFilter4 }],
+      $and: [{ ...customFilter3 }, { ...customFilter1 }, { ...customFilter2 }, { ...customFilter4 }, { ...filter }],
     };
     const entities = await this.dbEntity.find(finalFilter, pageNumber?.toString());
 
