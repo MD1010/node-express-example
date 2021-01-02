@@ -9,21 +9,30 @@ export abstract class GenericCrudController<T extends Document> {
 
   protected getEntities = errorHandler(async (req: Request, res: Response) => {
     let { pageNumber, ...filter } = req.query;
+    let customFilter = {};
     if (filter.name) {
       filter = { name: new RegExp([filter.name].join(""), "i") as any };
+      customFilter = { ...filter };
     }
     if (filter.muslces) {
       let arr = filter.muslces.toString().split(",");
       filter = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
+      customFilter = { ...customFilter, ...filter };
+    }
+
+    if (filter.muscleGroup) {
+      let muscleGroup = filter.muscleGroup.toString();
+      filter = { muscleGroup };
+      customFilter = { ...customFilter, ...filter };
     }
 
     const entities = await this.dbEntity.find(filter, pageNumber?.toString());
-    if (isEmpty(filter) && isEmpty(pageNumber)) {
+    if (isEmpty(customFilter) && isEmpty(pageNumber)) {
       return res.json(entities);
     }
     //for filter case total records has to be added for pagination
 
-    const totalFilteredRecords = (await this.dbEntity.getModel().find(filter)).length;
+    const totalFilteredRecords = (await this.dbEntity.getModel().find(customFilter)).length;
 
     return res.json({ entities, totalFilteredRecords });
   });
