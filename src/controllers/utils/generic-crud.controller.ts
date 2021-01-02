@@ -26,7 +26,7 @@ export abstract class GenericCrudController<T extends Document> {
       customFilter = { $and: [{ ...customFilter }, { ...filter2 }] };
     }
 
-    const entities = await this.dbEntity.find(filter, pageNumber?.toString());
+    const entities = await this.dbEntity.find(customFilter, pageNumber?.toString());
     // if (isEmpty(customFilter) && isEmpty(pageNumber)) {
     //   return res.json(entities);
     // }
