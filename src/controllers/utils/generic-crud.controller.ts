@@ -13,10 +13,11 @@ export abstract class GenericCrudController<T extends Document> {
       let filter3 = { name: new RegExp([filter.name].join(""), "i") as any };
       customFilter = { ...filter3 };
     }
-    if (filter.muscles) {
-      let arr = filter.muscles.toString().split(",");
-      filter = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
-      customFilter = { ...customFilter, ...filter };
+    if (filter.muslces) {
+      let arr = filter.muslces.toString().split(",");
+      console.log(arr);
+      let filter1 = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
+      customFilter = { ...customFilter, ...filter1 };
     }
 
     if (filter.muscleGroup) {
@@ -26,6 +27,7 @@ export abstract class GenericCrudController<T extends Document> {
       customFilter = { $and: [{ ...customFilter }, { ...filter2 }] };
     }
 
+    console.log(customFilter);
     const entities = await this.dbEntity.find(customFilter, pageNumber?.toString());
     // if (isEmpty(customFilter) && isEmpty(pageNumber)) {
     //   return res.json(entities);
