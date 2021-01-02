@@ -9,13 +9,9 @@ userRouter.post("/login", userController.login);
 
 userRouter.get(
   "/:username/trainings/:day",
-  authenticateJWT,
+  // authenticateJWT,
   userController.getUserTrainingsByMuscleGroup
 );
-userRouter.post(
-  "/:username/trainings",
-  authenticateJWT,
-  userController.AddExcericeToDayTraining
-);
+userRouter.post("/:username/trainings", authenticateJWT, userController.AddExcericeToDayTraining);
 
 userRouter.post("/like", authenticateJWT, userController.likeTraining);

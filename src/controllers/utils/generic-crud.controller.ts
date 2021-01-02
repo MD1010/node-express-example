@@ -12,6 +12,10 @@ export abstract class GenericCrudController<T extends Document> {
     if (filter.name) {
       filter = { name: new RegExp([filter.name].join(""), "i") as any };
     }
+    if (filter.muslces) {
+      let arr = filter.muslces.toString().split(",");
+      filter = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
+    }
     const entities = await this.dbEntity.find(filter, pageNumber?.toString());
     if (isEmpty(filter) && isEmpty(pageNumber)) {
       return res.json(entities);
