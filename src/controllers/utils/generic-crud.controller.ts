@@ -13,15 +13,13 @@ export abstract class GenericCrudController<T extends Document> {
       let filter3 = { name: new RegExp([filter.name].join(""), "i") as any };
       customFilter = { ...filter3 };
     }
-    if (filter.muslces) {
-      let arr = filter.muslces.toString().split(",");
-      console.log(arr);
+    if (filter.muscles) {
+      let arr = filter.muscles.toString().split(",");
       let filter1 = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
       customFilter = { ...customFilter, ...filter1 };
     }
 
     if (filter.muscleGroup) {
-      console.log(customFilter);
       let muscleGroup = filter.muscleGroup.toString();
       let filter2 = { muscleGroup: muscleGroup };
       customFilter = { $and: [{ ...customFilter }, { ...filter2 }] };
