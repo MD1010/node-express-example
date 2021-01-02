@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { isEmpty } from "lodash";
 import { Document } from "mongoose";
 import { DbEnity } from "../../dal";
-import { errorHandler } from "../../utils";
+import { errorHandler, toObjectId } from "../../utils";
 
 export abstract class GenericCrudController<T extends Document> {
   constructor(protected dbEntity: DbEnity<T>) {}
@@ -11,22 +11,25 @@ export abstract class GenericCrudController<T extends Document> {
     let { pageNumber, ...filter } = req.query;
     let customFilter = {};
     if (filter.name) {
-      filter = { name: new RegExp([filter.name].join(""), "i") as any };
-      customFilter = { ...filter };
+      let filter3 = { name: new RegExp([filter.name].join(""), "i") as any };
+      customFilter = { ...filter3 };
     }
     if (filter.muslces) {
       let arr = filter.muslces.toString().split(",");
-      filter = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
-      customFilter = { ...customFilter, ...filter };
+      let filter1 = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
+      // customFilter = { $and: [{ ...customFilter }, { ...filter1 }] };
+      customFilter = { ...customFilter, ...filter1 };
     }
 
     if (filter.muscleGroup) {
+      console.log(customFilter);
       let muscleGroup = filter.muscleGroup.toString();
-      filter = { muscleGroup };
-      customFilter = { ...customFilter, ...filter };
+      let filter2 = { muscleGroup: muscleGroup };
+      customFilter = { $and: [{ ...customFilter }, { ...filter2 }] };
     }
 
-    const entities = await this.dbEntity.find(filter, pageNumber?.toString());
+    console.log(customFilter);
+    const entities = await this.dbEntity.find(customFilter, pageNumber?.toString());
     if (isEmpty(customFilter) && isEmpty(pageNumber)) {
       return res.json(entities);
     }
