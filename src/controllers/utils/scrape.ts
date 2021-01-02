@@ -93,6 +93,7 @@ async function scrapExercise(exerciseUrl: string) {
   let instructions: any[] = [];
   let primaryMuscles: any[] = [];
   let secondaryMuscles: any[] = [];
+  let difficultyLevel: number = Math.floor(Math.random() * 3);
   let instructionsUlElement = dom.window.document.querySelector(".show-for-small-down~ul")?.children!;
 
   Array.from(instructionsUlElement).map((instruction) => {
@@ -110,6 +111,7 @@ async function scrapExercise(exerciseUrl: string) {
   });
 
   return {
+    difficultyLevel,
     name,
     image,
     video,
