@@ -8,31 +8,26 @@ export abstract class GenericCrudController<T extends Document> {
 
   protected getEntities = errorHandler(async (req: Request, res: Response) => {
     let { pageNumber, ...filter } = req.query;
-    let customFilter = {};
+    let customFilter1 = {};
+    let customFilter2 = {};
+    let customFilter3 = {};
     if (filter.name) {
-      let filter3 = { name: new RegExp([filter.name].join(""), "i") as any };
-      customFilter = { ...filter3 };
+      customFilter3 = { name: new RegExp([filter.name].join(""), "i") as any };
     }
     if (filter.muscles) {
       let arr = filter.muscles.toString().split(",");
-      let filter1 = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
-      customFilter = { ...customFilter, ...filter1 };
+      customFilter1 = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
     }
 
     if (filter.muscleGroup) {
       let muscleGroup = filter.muscleGroup.toString();
-      let filter2 = { muscleGroup: muscleGroup };
-      customFilter = { $and: [{ ...customFilter }, { ...filter2 }] };
+      customFilter2 = { muscleGroup: muscleGroup };
     }
 
-    console.log(customFilter);
-    const entities = await this.dbEntity.find(customFilter, pageNumber?.toString());
-    // if (isEmpty(customFilter) && isEmpty(pageNumber)) {
-    //   return res.json(entities);
-    // }
-    //for filter case total records has to be added for pagination
+    const finalFilter = { $and: [{ ...customFilter3 }, { ...customFilter1 }, { ...customFilter2 }] };
+    const entities = await this.dbEntity.find(finalFilter, pageNumber?.toString());
 
-    const totalFilteredRecords = (await this.dbEntity.getModel().find(customFilter)).length;
+    const totalFilteredRecords = (await this.dbEntity.getModel().find(finalFilter)).length;
 
     return res.json({ entities, totalFilteredRecords });
   });
