@@ -1,10 +1,9 @@
-import { PostEntity } from "../entities";
-import { Post } from "../models";
-import { GenericCrudController } from "./utils/generic-crud.controller";
-import { errorHandler } from "../utils/errorHandler";
 import { Request, Response } from "express";
 import { emit } from "process";
-import { toObjectId } from "../utils/base-id";
+import { PostEntity } from "../entities";
+import { Post } from "../models";
+import { errorHandler } from "../utils/errorHandler";
+import { GenericCrudController } from "./utils/generic-crud.controller";
 
 export class PostController extends GenericCrudController<Post> {
   constructor() {
@@ -18,7 +17,6 @@ export class PostController extends GenericCrudController<Post> {
   deletePost = this.deleteEntity;
 
   getMostViewdTraining = errorHandler(async (req: Request, res: Response) => {
-    console.log("gfgfgfgfgfg");
     let o: any = {},
       self = this;
     o.map = function () {
