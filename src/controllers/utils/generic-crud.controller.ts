@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { isEmpty } from "lodash";
 import { Document } from "mongoose";
 import { DbEnity } from "../../dal";
 import { errorHandler, toObjectId } from "../../utils";
@@ -13,34 +14,54 @@ export abstract class GenericCrudController<T extends Document> {
     let customFilter3 = {};
     let customFilter4 = {};
 
-    if (filter.name) {
-      customFilter3 = { name: new RegExp([filter.name].join(""), "i") as any };
-      delete filter.name;
-    }
-    if (filter.muscles) {
-      let arr = filter.muscles.toString().split(",");
-      customFilter1 = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
-      delete filter.muscles;
-    }
+    let { name, muscles, muscleGroup, difficultyLevel, ...remainingFilters } = filter;
 
-    if (filter.muscleGroup) {
-      let muscleGroup = filter.muscleGroup.toString();
-      customFilter2 = { muscleGroup: muscleGroup };
-      delete filter.muscleGroup;
-    }
+    // if (filter.name) {
+    //   customFilter3 = { name: new RegExp([filter.name].join(""), "i") as any };
+    //   delete filter.name;
+    // }
+    // if (filter.muscles) {
+    //   let arr = filter.muscles.toString().split(",");
+    //   customFilter1 = { $or: [{ "muscles.primary": { $in: arr } }, { "muscles.secondary": { $in: arr } }] };
+    //   delete filter.muscles;
+    // }
 
-    if (filter.difficultyLevel) {
-      let difficultyLevel = filter.difficultyLevel.toString();
-      customFilter4 = { difficultyLevel: difficultyLevel };
-      delete filter.difficultyLevel;
-    }
+    // if (filter.muscleGroup) {
+    //   let muscleGroup = filter.muscleGroup.toString();
+    //   customFilter2 = { muscleGroup: muscleGroup };
+    //   delete filter.muscleGroup;
+    // }
 
-    const finalFilter = {
-      $and: [{ ...customFilter3 }, { ...customFilter1 }, { ...customFilter2 }, { ...customFilter4 }, { ...filter }],
+    // if (filter.difficultyLevel) {
+    //   let difficultyLevel = filter.difficultyLevel.toString();
+    //   customFilter4 = { difficultyLevel: difficultyLevel };
+    //   delete filter.difficultyLevel;
+    // }
+
+    const filter23 = {
+      $and: [
+        !isEmpty(name) ? { name: new RegExp([name].join(""), "i") as any } : {},
+        !isEmpty(muscles)
+          ? {
+              $or: [
+                { "muscles.primary": { $in: muscles?.toString().split(",") } },
+                { "muscles.secondary": { $in: muscles?.toString().split(",") } },
+              ],
+            }
+          : {},
+        !isEmpty(muscleGroup) ? { muscleGroup: muscleGroup?.toString() } : {},
+        !isEmpty(difficultyLevel) ? { difficultyLevel: difficultyLevel?.toString() } : {},
+        { ...remainingFilters },
+      ],
     };
-    const entities = await this.dbEntity.find(finalFilter, pageNumber?.toString());
 
-    const totalFilteredRecords = (await this.dbEntity.getModel().find(finalFilter)).length;
+    // const finalFilter = {
+    //   $and: [{ ...customFilter3 }, { ...customFilter1 }, { ...customFilter2 }, { ...customFilter4 }, { ...filter }],
+    // };
+    const entities = await this.dbEntity.find(filter23, pageNumber?.toString());
+
+    const totalFilteredRecords = (await this.dbEntity.find(filter23)).length;
+    // const totalFilteredRecords = (await this.dbEntity.getModel().find(filter23)).length;
 
     return res.json({ entities, totalFilteredRecords });
   });
