@@ -7,19 +7,12 @@ import { errorHandler } from "./utils/errorHandler";
 
 export const appRouter = Router();
 
-// appRouter.use("/api/users", userRouter);
-// appRouter.use("/api/exercises", authenticateJWT, exerciseRouter);
-// appRouter.use("/api/trainings", authenticateJWT, trainingRouter);
-// appRouter.use("/api/muscleGroups", authenticateJWT, muscleGroupRouter);
-// appRouter.use("/api/muscles", authenticateJWT, muscleRouter);
-// appRouter.use("/api/posts", authenticateJWT, postRouter);
-
 appRouter.use("/api/users", userRouter);
-appRouter.use("/api/exercises", exerciseRouter);
-appRouter.use("/api/trainings", trainingRouter);
-appRouter.use("/api/muscleGroups", muscleGroupRouter);
-appRouter.use("/api/muscles", muscleRouter);
-appRouter.use("/api/posts", postRouter);
+appRouter.use("/api/exercises", authenticateJWT, exerciseRouter);
+appRouter.use("/api/trainings", authenticateJWT, trainingRouter);
+appRouter.use("/api/muscleGroups", authenticateJWT, muscleGroupRouter);
+appRouter.use("/api/muscles", authenticateJWT, muscleRouter);
+appRouter.use("/api/posts", authenticateJWT, postRouter);
 
 appRouter.get("/check", (req, res) => {
   res.send("ok");
