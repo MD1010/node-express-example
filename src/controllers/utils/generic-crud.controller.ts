@@ -24,7 +24,7 @@ export abstract class GenericCrudController<T extends Document> {
           : {},
         !isEmpty(muscleGroup) ? { muscleGroup: muscleGroup?.toString() } : {},
         !isEmpty(difficultyLevel) ? { difficultyLevel: difficultyLevel?.toString() } : {},
-        // !isEmpty(musclesGroups) ? { musclesGroups: { $in: musclesGroups?.toString() } } : {},
+        !isEmpty(musclesGroups) ? { musclesGroups: { $in: musclesGroups?.toString() } } : {},
         !isEmpty(duration) ? { duration: { $lte: duration } } : {},
         { ...remainingFilters },
       ],
