@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { isEmpty } from "lodash";
 import { Document } from "mongoose";
 import { DbEnity } from "../../dal";
-import { errorHandler, toObjectId } from "../../utils";
+import { errorHandler } from "../../utils";
 
 export abstract class GenericCrudController<T extends Document> {
   constructor(protected dbEntity: DbEnity<T>) {}
