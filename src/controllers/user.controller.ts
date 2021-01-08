@@ -78,7 +78,23 @@ export class UserController extends GenericCrudController<User> {
     return res.json(await UserDAL.TrainingsByMuslceGroup(req.params.username, req.params.day));
   });
 
+  deleteUserExcercise = errorHandler(async (req: Request, res: Response) => {
+    return res.json(await UserDAL.deleteUserExcercise(req.params.username, req.params.day, req.params.exerciseID));
+  });
+
+  deleteUserExcercises = errorHandler(async (req: Request, res: Response) => {
+    return res.json(await UserDAL.deleteUserExcercises(req.params.username, req.params.day));
+  });
+
   AddExcericeToDayTraining = errorHandler(async (req: Request, res: Response) => {
+    const exercise = await UserDAL.CheckIfExcericeExists(
+      req.params.username,
+      req.body.personalPreferences.day,
+      req.body.exerciseID
+    );
+    if (exercise.length > 0) {
+      throw Exceptions.ENTITY_EXISTS;
+    }
     return res.json(
       await UserDAL.AddExcericeToDayTraining(req.params.username, req.body.exerciseID, req.body.personalPreferences)
     );
