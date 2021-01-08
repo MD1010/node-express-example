@@ -14,13 +14,6 @@ appRouter.use("/api/muscleGroups", authenticateJWT, muscleGroupRouter);
 appRouter.use("/api/muscles", authenticateJWT, muscleRouter);
 appRouter.use("/api/posts", authenticateJWT, postRouter);
 
-// appRouter.use("/api/users", userRouter);
-// appRouter.use("/api/exercises", exerciseRouter);
-// appRouter.use("/api/trainings", trainingRouter);
-// appRouter.use("/api/muscleGroups", muscleGroupRouter);
-// appRouter.use("/api/muscles", muscleRouter);
-// appRouter.use("/api/posts", postRouter);
-
 appRouter.get("/check", (req, res) => {
   res.send("ok");
 });
