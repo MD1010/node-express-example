@@ -31,8 +31,11 @@ export class UserController extends GenericCrudController<User> {
   });
 
   signup = errorHandler(async (req: Request, res: Response) => {
-    console.log(req.body);
     const { username, password } = req.body;
+    const user = await UserEntity.findOne({ username });
+    if (user) {
+      throw Exceptions.ENTITY_EXISTS;
+    }
     await UserEntity.getModel().create({
       username: username,
       password: bcrypt.hashSync(password, await bcrypt.genSalt(10)),
