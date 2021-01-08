@@ -30,6 +30,46 @@ export class UserController extends GenericCrudController<User> {
     });
   });
 
+  signup = errorHandler(async (req: Request, res: Response) => {
+    console.log(req.body);
+    const { username, password } = req.body;
+    await UserEntity.getModel().create({
+      username: username,
+      password: bcrypt.hashSync(password, await bcrypt.genSalt(10)),
+      isAdmin: false,
+      trainings: [
+        {
+          day: 1,
+          exercises: [],
+        },
+        {
+          day: 2,
+          exercises: [],
+        },
+        {
+          day: 3,
+          exercises: [],
+        },
+        {
+          day: 4,
+          exercises: [],
+        },
+        {
+          day: 5,
+          exercises: [],
+        },
+        {
+          day: 6,
+          exercises: [],
+        },
+      ],
+    });
+
+    res.json({
+      isCreate: true,
+    });
+  });
+
   getAllUsers = this.getEntities;
   getUserTrainingsByMuscleGroup = errorHandler(async (req: Request, res: Response) => {
     return res.json(await UserDAL.TrainingsByMuslceGroup(req.params.username, req.params.day));
