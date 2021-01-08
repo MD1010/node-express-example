@@ -20,6 +20,7 @@ const ExerciseSchema: Schema = new Schema(
       secondary: [{ type: Schema.Types.ObjectId, ref: "Muscle" }],
     },
     image: { type: String, required: true },
+    difficultyLevel: { type: Number, required: true },
     instructions: [{ type: String, required: true }],
   },
   { versionKey: false }

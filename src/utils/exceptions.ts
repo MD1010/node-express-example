@@ -8,6 +8,11 @@ export namespace Exceptions {
     code: 401,
   };
 
+  export const SESSION_TIMEOUT: IServerException = {
+    message: "Session Timeout",
+    code: 403,
+  };
+
   export const ENTITY_EXISTS: IServerException = {
     message: "Entity already exists",
     code: 409, // conflict

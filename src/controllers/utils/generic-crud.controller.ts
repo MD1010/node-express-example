@@ -9,16 +9,29 @@ export abstract class GenericCrudController<T extends Document> {
 
   protected getEntities = errorHandler(async (req: Request, res: Response) => {
     let { pageNumber, ...filter } = req.query;
-    if (filter.name) {
-      filter = { name: new RegExp([filter.name].join(""), "i") as any };
-    }
-    const entities = await this.dbEntity.find(filter, pageNumber?.toString());
-    if (isEmpty(filter) && isEmpty(pageNumber)) {
-      return res.json(entities);
-    }
-    //for filter case total records has to be added for pagination
+    let { name, muscles, muscleGroup, musclesGroups, duration, difficultyLevel, ...remainingFilters } = filter;
 
-    const totalFilteredRecords = (await this.dbEntity.getModel().find(filter)).length;
+    const customFilter = {
+      $and: [
+        !isEmpty(name) ? { name: new RegExp([name].join(""), "i") as any } : {},
+        !isEmpty(muscles)
+          ? {
+              $or: [
+                { "muscles.primary": { $in: muscles?.toString().split(",") } },
+                { "muscles.secondary": { $in: muscles?.toString().split(",") } },
+              ],
+            }
+          : {},
+        !isEmpty(muscleGroup) ? { muscleGroup: muscleGroup?.toString() } : {},
+        !isEmpty(difficultyLevel) ? { difficultyLevel: difficultyLevel?.toString() } : {},
+        !isEmpty(musclesGroups) ? { musclesGroups: { $in: musclesGroups?.toString() } } : {},
+        !isEmpty(duration) ? { duration: { $lte: duration } } : {},
+        { ...remainingFilters },
+      ],
+    };
+
+    const entities = await this.dbEntity.find(customFilter, pageNumber?.toString());
+    const totalFilteredRecords = (await this.dbEntity.find(customFilter)).length;
 
     return res.json({ entities, totalFilteredRecords });
   });

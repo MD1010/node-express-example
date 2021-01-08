@@ -1,17 +1,8 @@
-import {
-  ExerciseEntity,
-  PostEntity,
-  TrainingEntity,
-  UserEntity,
-} from "../entities";
+import { ExerciseEntity, PostEntity, TrainingEntity, UserEntity } from "../entities";
 import { toObjectId } from "../utils/base-id";
 
 export namespace UserDAL {
-  export const AddExcericeToDayTraining = async (
-    username: string,
-    exerciseID: string,
-    personalPreferences: any
-  ) => {
+  export const AddExcericeToDayTraining = async (username: string, exerciseID: string, personalPreferences: any) => {
     return UserEntity.getModel().update(
       {
         username: username,
@@ -33,10 +24,7 @@ export namespace UserDAL {
     );
   };
 
-  export const TrainingsByMuslceGroup = async (
-    username: string,
-    day: string
-  ) => {
+  export const TrainingsByMuslceGroup = async (username: string, day: string) => {
     return UserEntity.getModel()
       .aggregate([
         {
@@ -127,18 +115,17 @@ export namespace UserDAL {
         },
       ])
       .then((result) => {
-        return result;
+        if (result[0].muscleGroup) {
+          return result;
+        } else {
+          return [];
+        }
       })
       .catch((error: Error) => {
         throw error;
       });
   };
-  export const updateLikes = async (
-    objectId: string,
-    userName: string,
-    likesChange: number,
-    objectType: string
-  ) => {
+  export const updateLikes = async (objectId: string, userName: string, likesChange: number, objectType: string) => {
     type entityType = typeof TrainingEntity | typeof PostEntity;
     let entity: entityType;
     entity = objectType == "training" ? TrainingEntity : PostEntity;
