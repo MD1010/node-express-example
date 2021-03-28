@@ -24,6 +24,80 @@ export namespace UserDAL {
     );
   };
 
+  export const CheckIfExcericeExists = async (username: string, day: string, exerciseID: string) => {
+    return UserEntity.getModel().aggregate([
+      {
+        $match: { username: username },
+      },
+      {
+        $unwind: {
+          path: "$trainings",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $match: { "trainings.day": parseInt(day) },
+      },
+      {
+        $unwind: {
+          path: "$trainings.exercises",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $match: { "trainings.exercises.exercise": toObjectId(exerciseID) },
+      },
+      {
+        $group: {
+          _id: "$trainings.exercises.exercise",
+          exercises: { $first: "$trainings.exercises.exercise" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          exercises: 1,
+        },
+      },
+    ]);
+  };
+
+  export const deleteUserExcercise = async (username: string, day: string, exerciseID: string) => {
+    return UserEntity.getModel().update(
+      {
+        username: username,
+      },
+      {
+        $pull: {
+          "trainings.$[elem].exercises": { exercise: toObjectId(exerciseID) },
+        },
+      },
+      {
+        upsert: true,
+        safe: true,
+        arrayFilters: [{ "elem.day": parseInt(day) }],
+      }
+    );
+  };
+
+  export const deleteUserExcercises = async (username: string, day: string) => {
+    return UserEntity.getModel().update(
+      {
+        username: username,
+      },
+      {
+        $set: {
+          "trainings.$[elem].exercises": [],
+        },
+      },
+      {
+        upsert: true,
+        safe: true,
+        arrayFilters: [{ "elem.day": parseInt(day) }],
+      }
+    );
+  };
+
   export const TrainingsByMuslceGroup = async (username: string, day: string) => {
     return UserEntity.getModel()
       .aggregate([
