@@ -28,7 +28,7 @@ export class TrainingController extends GenericCrudController<Training> {
   createTraining = errorHandler(async (req: Request, res: Response) => {
     const training: Training = { ...req.body };
     let youtubeVideo = await youtube.search(training.video);
-    training.duration = youtubeVideo.videos[0].duration;
+    training.duration = youtubeVideo.videos[0]?.duration || 600;
     let newEntity = await this.dbEntity.create(training);
     socketServer.sockets.emit("newItem", "training");
     return res.json({ created: newEntity._id });
@@ -48,11 +48,7 @@ export class TrainingController extends GenericCrudController<Training> {
         ["desc"]
       );
     } else {
-      sortedTrainings = orderBy(
-        await this.dbEntity.find({}),
-        [sortBy],
-        ["desc"]
-      );
+      sortedTrainings = orderBy(await this.dbEntity.find({}), [sortBy], ["desc"]);
     }
 
     res.json(sortedTrainings);
