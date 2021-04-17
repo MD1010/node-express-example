@@ -42,7 +42,7 @@ export class TrainingController extends GenericCrudController<Training> {
     if (trainingName != undefined) {
       sortedTrainings = orderBy(
         await this.dbEntity.find({
-          $query: { name: { $regex: `.*${trainingName}.*` } },
+          $query: { name: { $regex: new RegExp(`.*${trainingName}.*`, "i") } },
         }),
         [sortBy],
         ["desc"]
