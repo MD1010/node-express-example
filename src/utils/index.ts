@@ -1,4 +1,2 @@
-export * from "./base-id";
-export * from "./errorHandler";
+export * from "./error-handler";
 export * from "./exceptions";
-export * from "./socketManager";

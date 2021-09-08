@@ -1,1 +1,1 @@
-export * from "./generic-crud.interface";
+export * from "./int.interface";
