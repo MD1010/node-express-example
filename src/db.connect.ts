@@ -4,10 +4,7 @@ export default (db: any) => {
   const connect = () => {
     try {
       mongoose
-        .connect(db, {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-        })
+        .connect(db, {})
         .then(() => {
           return console.info(`Successfully connected to ${db}`);
         })
