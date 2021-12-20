@@ -1,5 +1,24 @@
-import { IUser } from "gymstagram-common";
-import { Document } from "mongoose";
+import { Model, DataTypes, Sequelize } from "sequelize";
+import { sequelize } from "../db.init";
 
-type Model = Document & IUser;
-export interface User extends Model {}
+class User extends Model {}
+
+User.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  },
+  { sequelize, timestamps: false }
+);
+export { User };

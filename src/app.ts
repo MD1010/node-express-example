@@ -2,7 +2,8 @@ import * as bodyParser from "body-parser";
 import cors from "cors";
 import express, { Application } from "express";
 import { createServer } from "http";
-import { connectDB } from "./db.connect";
+import { connectDB } from "./db.init";
+import { User } from "./models/user.model";
 import { appRouter } from "./router";
 
 function useMiddlewares(app: Application) {
@@ -17,8 +18,8 @@ function useMiddlewares(app: Application) {
 async function main() {
   const app = express();
   const http = createServer(app);
-  useMiddlewares(app);
   await connectDB();
+  useMiddlewares(app);
   http.listen(5000, () => console.log(`Server listening on port 5000`));
 }
 main();

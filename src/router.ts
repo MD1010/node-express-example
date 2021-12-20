@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { Sequelize } from "sequelize";
-import { myRouter } from "./routes";
+import { userRouter } from "./routes";
 
 export const appRouter = Router();
 
-appRouter.use("/my", myRouter);
+appRouter.use("/users", userRouter);
 
 appRouter.get("/check", (req, res) => {
   res.send("ok");
