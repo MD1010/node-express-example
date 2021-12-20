@@ -3,7 +3,6 @@ import cors from "cors";
 import express, { Application } from "express";
 import { createServer } from "http";
 import { connectDB } from "./db.init";
-import { User } from "./models/user.model";
 import { appRouter } from "./router";
 
 function useMiddlewares(app: Application) {
