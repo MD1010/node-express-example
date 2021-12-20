@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { Sequelize } from "sequelize";
 import { myRouter } from "./routes";
 
 export const appRouter = Router();
