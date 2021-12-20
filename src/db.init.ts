@@ -6,7 +6,6 @@ export const sequelize = new Sequelize("mysql://admin:nxTjYEgu@163.123.183.84:17
 export const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    return { sequelize };
     console.log("successfully connected to db");
   } catch (e) {
     console.error(e);

@@ -17,8 +17,8 @@ function useMiddlewares(app: Application) {
 async function main() {
   const app = express();
   const http = createServer(app);
+  http.listen(5000, () => console.log(`Server listening on port 5000`));
   await connectDB();
   useMiddlewares(app);
-  http.listen(5000, () => console.log(`Server listening on port 5000`));
 }
 main();

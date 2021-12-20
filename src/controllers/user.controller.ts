@@ -18,6 +18,6 @@ export class UserController {
 
   deleteUser = errorHandler(async (req: Request, res: Response) => {
     const deleted = await User.destroy({ where: { id: req.params.id } });
-    return res.json({ deleted: !!deleted });
+    return res.json({ isDeleted: !!deleted });
   });
 }
